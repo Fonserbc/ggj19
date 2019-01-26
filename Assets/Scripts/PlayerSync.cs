@@ -27,13 +27,19 @@ public class PlayerSync : MonoBehaviour
     public GameSettings settings;
     public GameObject localPlayerObject;
     public GameObject dummyPlayerObject;
-    public Photon.Voice.PUN.PhotonVoiceView voiceView;
     float lastOrbitPos;
     [HideInInspector]
     public int playerID = 0;
 
     [HideInInspector]
     public bool isLocal = false;
+
+    bool initialized = false;
+
+    private void Start()
+    {
+        if (!initialized) Init();
+    }
 
     public void Init() {
         ownView = GetComponent<PhotonView>();
@@ -53,6 +59,7 @@ public class PlayerSync : MonoBehaviour
         localPlayerObject.SetActive(isLocal);
         dummyPlayerObject.SetActive(!isLocal);
 
+        initialized = true;
         Debug.Log("Player initialized!");
     }
 
@@ -75,11 +82,6 @@ public class PlayerSync : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!isLocal) UpdateState();
-    }
-
     public void UpdateState()
     {
         if (isLocal)
@@ -100,6 +102,16 @@ public class PlayerSync : MonoBehaviour
             receivedState.currentSpeed = Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, Time.deltaTime * 4f);
             lastOrbitPos += Time.deltaTime * receivedState.currentSpeed;
             ownState.currentOrbit.z = Mathf.Lerp(ownState.currentOrbit.z + ownState.currentSpeed * Time.deltaTime, lastOrbitPos, Time.deltaTime * 4f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (localPlayer == this) {
+            localPlayer = null;
+        }
+        if (otherPlayer == this) {
+            otherPlayer = null;
         }
     }
 }

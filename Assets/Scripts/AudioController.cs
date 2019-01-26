@@ -6,10 +6,18 @@ using UnityEngine.Audio;
 
 public class AudioController : MonoBehaviour {
 
+    public GameSettings settings;
     public PhotonVoiceView voiceView;
     public AudioMixerGroup voiceGroup;
+    public AudioMixer voiceMixer;
+    public AnimationCurve volumeDropCurve;
 
     AudioSource audioSource = null;
+
+    public float pitchFactor = 10f;
+
+    float lastDistance = 0f;
+    float maxDistance = 0f;
 
     public void Awake()
     {
@@ -17,6 +25,7 @@ public class AudioController : MonoBehaviour {
         {
             FindAudioSource();
         }
+        maxDistance = settings.radiuses[0] + settings.radiuses[1];
     }
 
     private void Update()
@@ -27,7 +36,21 @@ public class AudioController : MonoBehaviour {
         }
 
         if (audioSource != null) {
-            
+
+            if (PlayerSync.otherPlayer != null) {
+                float currentDistance = Vector3.Distance(PlayerSync.otherPlayer.dummyPlayerObject.transform.position, PlayerSync.localPlayer.localPlayerObject.transform.position);
+
+                float speed = (currentDistance - lastDistance)/maxDistance;
+
+                voiceMixer.SetFloat("ReceivedVoicePitch", speed * pitchFactor);
+                voiceMixer.SetFloat("ReceivedVoiceVolume", volumeDropCurve.Evaluate(Mathf.Clamp01(currentDistance / maxDistance)));
+
+                lastDistance = currentDistance;
+            }
+            else {
+                voiceMixer.SetFloat("ReceivedVoicePitch", 1f);
+                voiceMixer.SetFloat("ReceivedVoiceVolume", -80f);
+            }
         }
     }
 

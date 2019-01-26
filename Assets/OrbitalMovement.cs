@@ -35,7 +35,7 @@ public class OrbitalMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        this.UpdateInput();
+        if (playerSync.isLocal) this.UpdateInput();
         this.UpdateRotation();
     }
 
@@ -66,16 +66,14 @@ public class OrbitalMovement : MonoBehaviour {
             this.orbitAngle.y += orbitChangeAngle * ((int)playerSync.ownState.currentOrbit.z % 180 == 0 ? 1f : -1f); ;
         }
 
+        playerSync.ownState.orbitGoal = orbitAngle;
+        playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
     }
 
     // Update the object "position" by simply updating the angle
     private void UpdateRotation()
     {
-        playerSync.ownState.orbitGoal = orbitAngle;
-        playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
-
         playerSync.UpdateState();
-
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
     }
 }
