@@ -67,7 +67,7 @@ public class AudioController : MonoBehaviour {
                 fmodEventEmmiter.SetParameter("Polarity", fmodPolarity);
                 fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f + 1f;
 
-                if (fmodDistance < 2f) {
+                if (fmodDistance < 2f + Mathf.Abs(settings.innerRadius - settings.outerRadius)) { // 2 is because we are +1 up there
                     winTime += Time.deltaTime;
 
                     if (winTime >= minWinTime) {
