@@ -45,6 +45,7 @@ public class AudioController : MonoBehaviour {
 
                 float speed = (currentDistance - lastDistance)/maxDistance;
 
+                Debug.Log(speed * pitchFactor);
                 if (doPitchDistortion)
                 {
                     voiceMixer.SetFloat("ReceivedVoicePitch", Mathf.Clamp(speed * pitchFactor, -0.5f, 2f));
