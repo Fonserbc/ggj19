@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 
 [RequireComponent(typeof(PhotonView))]
-public class PlayerSync : MonoBehaviour
+public class PlayerSync : MonoBehaviour, IPunObservable
 {
 
     public static PlayerSync localPlayer, otherPlayer;
@@ -80,12 +80,14 @@ public class PlayerSync : MonoBehaviour
             receivedState.speedGoal = (float)stream.ReceiveNext();
 
             double deltaTime = (PhotonNetwork.Time - info.SentServerTime)/1000d;
+            Debug.Log(deltaTime);
             lastOrbitPos = receivedState.currentOrbit.z + Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, 0.5f) * (float)deltaTime;
         }
     }
 
     public void UpdateState()
     {
+        Debug.Log("islocal " + isLocal);
         if (isLocal)
         {
             ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, ownState.orbitGoal.x, Time.deltaTime * localLerpFactor);
@@ -97,8 +99,8 @@ public class PlayerSync : MonoBehaviour
         else
         {
             // Lerp state here (?)
-            ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, ownState.orbitGoal.x, Time.deltaTime * 4f);
-            ownState.currentOrbit.y = Mathf.Lerp(ownState.currentOrbit.y, ownState.orbitGoal.y, Time.deltaTime * 4f);
+            ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, receivedState.orbitGoal.x, Time.deltaTime * 4f);
+            ownState.currentOrbit.y = Mathf.Lerp(ownState.currentOrbit.y, receivedState.orbitGoal.y, Time.deltaTime * 4f);
 
             ownState.currentSpeed = Mathf.Lerp(ownState.currentSpeed, receivedState.speedGoal, Time.deltaTime * 4f);
             receivedState.currentSpeed = Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, Time.deltaTime * 4f);
