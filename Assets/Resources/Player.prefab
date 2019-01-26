@@ -653,8 +653,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  doPitchDistortion: 0
-  doVolumeDrop: 0
+  doPitchDistortion: 1
+  doVolumeDrop: 1
   pitchFactor: 100
 --- !u!114 &114993097666515066
 MonoBehaviour:
