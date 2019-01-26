@@ -13,10 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: /Users/fonserbc/Desktop/ggj19/GGJ19 DockingInOrbit/GGJ19 DockingInOrbit.fspro
-  SourceProjectPathUnformatted: /Users/fonserbc/Desktop/ggj19/GGJ19 DockingInOrbit/GGJ19
-    DockingInOrbit.fspro
-  SourceBankPathUnformatted: /Users/fonserbc/Desktop/ggj19/GGJ19 DockingInOrbit/Build
+  sourceProjectPath: MusicProject/GGJ19 DockingInOrbit/GGJ19 DockingInOrbit.fspro
+  SourceProjectPathUnformatted: MusicProject/GGJ19 DockingInOrbit/GGJ19 DockingInOrbit.fspro
+  SourceBankPathUnformatted: MusicProject/GGJ19 DockingInOrbit/Build
   AutomaticEventLoading: 1
   AutomaticSampleLoading: 0
   ImportType: 0

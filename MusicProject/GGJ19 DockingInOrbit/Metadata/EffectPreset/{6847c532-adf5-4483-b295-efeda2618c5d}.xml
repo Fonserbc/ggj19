@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="EffectPreset" id="{6847c532-adf5-4483-b295-efeda2618c5d}">
+        <property name="name">
+            <value>Reverb</value>
+        </property>
+        <relationship name="folder">
+            <destination>{c71bbd53-fd5e-48c1-bffa-e2addfe3259b}</destination>
+        </relationship>
+        <relationship name="effect">
+            <destination>{7fe5c562-0c30-43ea-94b4-8707f03c17e3}</destination>
+        </relationship>
+    </object>
+    <object class="SFXReverbEffect" id="{7fe5c562-0c30-43ea-94b4-8707f03c17e3}">
+        <property name="decayTime">
+            <value>10000</value>
+        </property>
+    </object>
+</objects>
