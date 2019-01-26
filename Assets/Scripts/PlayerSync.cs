@@ -12,10 +12,13 @@ public class PlayerSync : MonoBehaviour
     public struct PlayerSate {
         public Vector3 currentOrbit;
         public Vector2 orbitGoal;
-        public float speed;
+        public float currentSpeed;
+        public float speedGoal;
     }
 
     PhotonView ownView;
+
+    public float localLerpFactor = 3f;
 
     public PlayerSate ownState;
     PlayerSate receivedState;
@@ -64,15 +67,17 @@ public class PlayerSync : MonoBehaviour
         if (stream.IsWriting) {
             stream.SendNext(ownState.orbitGoal);
             stream.SendNext(ownState.currentOrbit);
-            stream.SendNext(ownState.speed);
+            stream.SendNext(ownState.currentSpeed);
+            stream.SendNext(ownState.speedGoal);
         }
         else {
             receivedState.orbitGoal = (Vector2)stream.ReceiveNext();
             receivedState.currentOrbit = (Vector3)stream.ReceiveNext();
-            receivedState.speed = (float)stream.ReceiveNext();
+            receivedState.currentSpeed = (float)stream.ReceiveNext();
+            receivedState.speedGoal = (float)stream.ReceiveNext();
 
             double deltaTime = (PhotonNetwork.Time - info.SentServerTime)/1000d;
-            lastOrbitPos = receivedState.currentOrbit.z + receivedState.speed * (float)deltaTime;
+            lastOrbitPos = receivedState.currentOrbit.z + Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, 0.5f) * (float)deltaTime;
         }
     }
 
@@ -80,7 +85,11 @@ public class PlayerSync : MonoBehaviour
     {
         if (isLocal)
         {
+            ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, ownState.orbitGoal.x, Time.deltaTime * localLerpFactor);
+            ownState.currentOrbit.y = Mathf.Lerp(ownState.currentOrbit.y, ownState.orbitGoal.y, Time.deltaTime * localLerpFactor);
+            ownState.currentSpeed = Mathf.Lerp(ownState.currentSpeed, ownState.speedGoal, Time.deltaTime * localLerpFactor);
 
+            ownState.currentOrbit.z += ownState.currentSpeed * Time.deltaTime;
         }
         else
         {
@@ -88,9 +97,10 @@ public class PlayerSync : MonoBehaviour
             ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, ownState.orbitGoal.x, Time.deltaTime * 4f);
             ownState.currentOrbit.y = Mathf.Lerp(ownState.currentOrbit.y, ownState.orbitGoal.y, Time.deltaTime * 4f);
 
-            ownState.speed = Mathf.Lerp(ownState.speed, receivedState.speed, Time.deltaTime * 4f);
-            lastOrbitPos += Time.deltaTime * receivedState.speed;
-            ownState.currentOrbit.z = Mathf.Lerp(ownState.currentOrbit.z + ownState.speed * Time.deltaTime, lastOrbitPos, Time.deltaTime * 4f);
+            ownState.currentSpeed = Mathf.Lerp(ownState.currentSpeed, receivedState.speedGoal, Time.deltaTime * 4f);
+            receivedState.currentSpeed = Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, Time.deltaTime * 4f);
+            lastOrbitPos += Time.deltaTime * receivedState.currentSpeed;
+            ownState.currentOrbit.z = Mathf.Lerp(ownState.currentOrbit.z + ownState.currentSpeed * Time.deltaTime, lastOrbitPos, Time.deltaTime * 4f);
         }
     }
 }

@@ -388,6 +388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd00e0a1f21fa4ab78713a951eaa1c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings: {fileID: 0}
   localPlayerObject: {fileID: 1645081672222668}
   dummyPlayerObject: {fileID: 1313166803892494}
   isLocal: 0

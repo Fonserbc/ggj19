@@ -11,4 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ddab8a3ed102487bb74e684f5f333de, type: 3}
   m_Name: Game Settings
   m_EditorClassIdentifier: 
-  longitudes: 12
+  longitudeDivisions: 12
+  speedPeriods: 140000000f0000000a00000005000000
+  radiuses: 1300000014000000

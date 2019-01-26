@@ -8,5 +8,5 @@ public class GameSettings : ScriptableObject {
     [Tooltip("in seconds")]
     public int[] speedPeriods;
 
-
+    public int[] radiuses;
 }
