@@ -55,7 +55,7 @@ public class OrbitalMovement : MonoBehaviour {
         if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
         {
             //this.orbitAngle.x -= orbitChangeAngle;
-            this.orbitAngle.y -= orbitChangeAngle;
+            this.orbitAngle.y -= (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
         }
 
         // Change Y axis to the right
@@ -63,7 +63,7 @@ public class OrbitalMovement : MonoBehaviour {
         {
 
             //this.orbitAngle.x += orbitChangeAngle;
-            this.orbitAngle.y += orbitChangeAngle;
+            this.orbitAngle.y += (this.refOrbit.transform.localEulerAngles.z  < 180f) ? orbitChangeAngle : -orbitChangeAngle;
         }
 
         playerSync.ownState.orbitGoal = orbitAngle;
@@ -74,6 +74,8 @@ public class OrbitalMovement : MonoBehaviour {
     {
         playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
         playerSync.UpdateState();
+        this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+        playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
     }
 }
