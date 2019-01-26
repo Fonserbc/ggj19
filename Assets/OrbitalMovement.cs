@@ -4,27 +4,38 @@ using UnityEngine;
 
 public class OrbitalMovement : MonoBehaviour {
 
-    public float orbitDistance;
-    public float orbitChangeAngle;
-    public float[] orbitSpeeds;
-    public bool inputActive;
+    public GameSettings settings;
+    public PlayerSync playerSync;
+
+    float orbitDistance;
+    float orbitChangeAngle;
+    float[] orbitSpeeds;
 
     private Vector3 orbitAngle;
     private int orbitSpeedIndex;
-    private GameObject refOrbiter;
-    private GameObject refOrbit;
+    public GameObject refOrbiter;
+    public GameObject refOrbit;
 
     // Use this for initialization
     void Start() {
 
-        this.refOrbit = this.transform.Find("Orbit").gameObject;
-        this.refOrbiter = this.refOrbit.transform.Find("Orbiter").gameObject;
+        orbitSpeeds = new float[settings.speedPeriods.Length];
+        for (int i = 0; i < orbitSpeeds.Length; ++i)
+        {
+            orbitSpeeds[i] = 360f / settings.speedPeriods[i];
+        }
+
+        orbitChangeAngle = 360f / settings.longitudeDivisions;
+
+        orbitDistance = settings.radiuses[Mathf.Clamp(playerSync.playerID, 0, settings.radiuses.Length)];
+
+        this.refOrbiter.transform.localPosition = new Vector3(0f, this.orbitDistance, 0f);
+        this.refOrbiter.transform.rotation = Quaternion.LookRotation(-refOrbiter.transform.position.normalized, -Vector3.right);
     }
 
     // Update is called once per frame
     void Update() {
-        if (this.inputActive)
-            this.UpdateInput();
+        this.UpdateInput();
         this.UpdateRotation();
     }
 
@@ -43,16 +54,16 @@ public class OrbitalMovement : MonoBehaviour {
         // Change Y axis to the left
         if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
         {
-            this.orbitAngle.x -= orbitChangeAngle;
-            this.orbitAngle.y -= orbitChangeAngle;
+            //this.orbitAngle.x -= orbitChangeAngle;
+            this.orbitAngle.y -= orbitChangeAngle * ((int)playerSync.ownState.currentOrbit.z % 180 == 0? 1f : -1f);
         }
 
         // Change Y axis to the right
         if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
         {
 
-            this.orbitAngle.x += orbitChangeAngle;
-            this.orbitAngle.y += orbitChangeAngle;
+            //this.orbitAngle.x += orbitChangeAngle;
+            this.orbitAngle.y += orbitChangeAngle * ((int)playerSync.ownState.currentOrbit.z % 180 == 0 ? 1f : -1f); ;
         }
 
     }
@@ -60,8 +71,11 @@ public class OrbitalMovement : MonoBehaviour {
     // Update the object "position" by simply updating the angle
     private void UpdateRotation()
     {
-        this.orbitAngle.z += this.orbitSpeeds[this.orbitSpeedIndex];
-        this.refOrbit.transform.localEulerAngles = orbitAngle;
-        this.refOrbiter.transform.localPosition = new Vector3(this.orbitDistance, 0f, 0f);
+        playerSync.ownState.orbitGoal = orbitAngle;
+        playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
+
+        playerSync.UpdateState();
+
+        this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
     }
 }

@@ -28,6 +28,8 @@ public class PlayerSync : MonoBehaviour
     public GameObject localPlayerObject;
     public GameObject dummyPlayerObject;
     float lastOrbitPos;
+    [HideInInspector]
+    public int playerID = 0;
 
     [HideInInspector]
     public bool isLocal = false;
@@ -45,16 +47,7 @@ public class PlayerSync : MonoBehaviour
             isLocal = false;
         }
 
-        // Debug
-        if (PhotonNetwork.LocalPlayer.ActorNumber == 0)
-        {
-            transform.position = new Vector3(0, 0, 0);
-        }
-        else
-        {
-            transform.position = new Vector3(2, 0, 0);
-        }
-        //
+        playerID = PhotonNetwork.LocalPlayer.ActorNumber;
 
         localPlayerObject.SetActive(isLocal);
         dummyPlayerObject.SetActive(!isLocal);
@@ -81,7 +74,12 @@ public class PlayerSync : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
+    {
+        if (!isLocal) UpdateState();
+    }
+
+    public void UpdateState()
     {
         if (isLocal)
         {
