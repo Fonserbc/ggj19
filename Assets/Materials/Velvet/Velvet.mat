@@ -22,12 +22,18 @@ Material:
         m_Texture: {fileID: 2800000, guid: 6057f3d24137a4017bce65534c974361, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _BumpMap2:
+        m_Texture: {fileID: 2800000, guid: 0e527c9260d5cf9458d62fe03e0db1b5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 33bf97636f0e740448facd8e91f618b2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _RimPower: 2.7
+    - _BumpMap2Intensity: 2
+    - _BumpMapIntensity: 1.47
+    - _RimPower: 4.45
     m_Colors:
     - _Color: {r: 0.6397059, g: 0.05174093, b: 0.05174093, a: 0}
-    - _RimColor: {r: 0.33027834, g: 0.2870891, b: 0.33088237, a: 0}
+    - _RimColor: {r: 0.6379542, g: 0.51270545, b: 0.6397059, a: 0}
