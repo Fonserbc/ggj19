@@ -80,14 +80,12 @@ public class PlayerSync : MonoBehaviour, IPunObservable
             receivedState.speedGoal = (float)stream.ReceiveNext();
 
             double deltaTime = (PhotonNetwork.Time - info.SentServerTime)/1000d;
-            Debug.Log(deltaTime);
             lastOrbitPos = receivedState.currentOrbit.z + Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, 0.5f) * (float)deltaTime;
         }
     }
 
     public void UpdateState()
     {
-        Debug.Log("islocal " + isLocal);
         if (isLocal)
         {
             ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, ownState.orbitGoal.x, Time.deltaTime * localLerpFactor);
