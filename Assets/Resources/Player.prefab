@@ -546,7 +546,7 @@ MonoBehaviour:
       time: 0
       value: 0
       inSlope: -145.61263
-      outSlope: -122.3146
+      outSlope: -7.2305245
       tangentMode: 1
     - serializedVersion: 2
       time: 1
@@ -557,7 +557,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  pitchFactor: 10
+  pitchFactor: 200
 --- !u!114 &114993097666515066
 MonoBehaviour:
   m_ObjectHideFlags: 1
