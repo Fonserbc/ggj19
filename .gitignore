@@ -31,4 +31,4 @@ sysinfo.txt
 *.DS_Store
 *.vs
 Assets/Photon/PhotonVoice/PhotonVoiceLibs/*
-Assets/Photon/
+Assets/Photon/*
