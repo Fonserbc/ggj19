@@ -36,7 +36,7 @@ public class AudioController : MonoBehaviour {
         {
             FindAudioSource();
         }
-        maxDistance = settings.radiuses[0] + settings.radiuses[1];
+        maxDistance = settings.innerRadius + settings.outerRadius;
     }
 
     float minSpeed = Mathf.Infinity;

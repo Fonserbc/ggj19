@@ -31,7 +31,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1190416944397770
 GameObject:
   m_ObjectHideFlags: 1
@@ -279,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 1964537959352666}
   m_LocalRotation: {x: 0, y: -0.38090897, z: 0, w: 0.92461264}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.3, y: 1, z: 0.3}
   m_Children: []
   m_Father: {fileID: 4336502857216178}
   m_RootOrder: 0
@@ -291,8 +291,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1877806288756438}
   m_LocalRotation: {x: 0, y: -0.38090897, z: 0, w: 0.92461264}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -1.166, z: 0}
+  m_LocalScale: {x: 1, y: 3.3333333, z: 1}
   m_Children: []
   m_Father: {fileID: 4827153784175066}
   m_RootOrder: 1
@@ -820,7 +820,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 114024013839989562}
-  viewIdField: 1
+  viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!124 &124628823985362142

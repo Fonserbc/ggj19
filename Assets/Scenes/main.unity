@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 367455828}
   - component: {fileID: 367455827}
   m_Layer: 0
-  m_Name: LoadingTitle (1)
+  m_Name: WinTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -617,11 +617,25 @@ Prefab:
     - target: {fileID: 114993097666515066, guid: b5552e0da9c2445939b84a544b2911a5,
         type: 2}
       propertyPath: viewIdField
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1157190374502916, guid: b5552e0da9c2445939b84a544b2911a5, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224879622498821978, guid: b5552e0da9c2445939b84a544b2911a5,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114993097666515066, guid: b5552e0da9c2445939b84a544b2911a5,
+        type: 2}
+      propertyPath: InstantiationId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4051594366542426, guid: b5552e0da9c2445939b84a544b2911a5, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b5552e0da9c2445939b84a544b2911a5, type: 2}
