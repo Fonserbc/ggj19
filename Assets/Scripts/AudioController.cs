@@ -31,6 +31,10 @@ public class AudioController : MonoBehaviour {
         maxDistance = settings.radiuses[0] + settings.radiuses[1];
     }
 
+    float minSpeed = Mathf.Infinity;
+    float maxSpeed = Mathf.NegativeInfinity;
+    float softenedSpeed = 0f;
+
     private void Update()
     {
         if (audioSource == null)
@@ -43,12 +47,21 @@ public class AudioController : MonoBehaviour {
             if (PlayerSync.otherPlayer != null) {
                 float currentDistance = Vector3.Distance(PlayerSync.otherPlayer.dummyPlayerObject.transform.position, PlayerSync.localPlayer.localPlayerObject.transform.position);
 
-                float speed = (currentDistance - lastDistance)/maxDistance;
+                float speed = (currentDistance - lastDistance)/maxDistance * pitchFactor;
+                float softFactor = 0.9f;
+                softenedSpeed = softenedSpeed * softFactor + speed * (1f - softFactor);
 
-                Debug.Log(speed * pitchFactor);
+                minSpeed = Mathf.Min(minSpeed, softenedSpeed);
+                maxSpeed = Mathf.Max(maxSpeed, softenedSpeed);
+
+                //if (softenedSpeed > 0 && speed > softenedSpeed) softenedSpeed = speed;
+                //else if (softenedSpeed < 0 && speed < softenedSpeed) softenedSpeed = speed;
+
+                //Debug.Log(speed+" "+ softenedSpeed+" min: "+minSpeed+" max: "+maxSpeed);
+
                 if (doPitchDistortion)
                 {
-                    voiceMixer.SetFloat("ReceivedVoicePitch", Mathf.Clamp(speed * pitchFactor, -0.5f, 2f));
+                    voiceMixer.SetFloat("ReceivedVoicePitch", Mathf.Lerp(0.5f, 2f, 1f - Mathf.InverseLerp(-0.7f, 0.7f, softenedSpeed)));
                 }
                 else {
                     voiceMixer.SetFloat("ReceivedVoicePitch", 1f);
@@ -73,7 +86,7 @@ public class AudioController : MonoBehaviour {
 
     void FindAudioSource()
     {
-        audioSource = voiceView.GetComponent<AudioSource>();
+        audioSource = voiceView.SpeakerInUse.gameObject.GetComponent<AudioSource>();
 
         if (audioSource != null) {
             audioSource.outputAudioMixerGroup = voiceGroup;
