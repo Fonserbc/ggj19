@@ -572,6 +572,7 @@ MonoBehaviour:
   settings: {fileID: 11400000, guid: 6c5e9672bbbf243a09f4023c139de870, type: 2}
   localPlayerObject: {fileID: 1645081672222668}
   dummyPlayerObject: {fileID: 1313166803892494}
+  audioController: {fileID: 114946316773294038}
   playerID: 0
   isLocal: 0
 --- !u!114 &114048870993039806
@@ -625,7 +626,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1157190374502916}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b67490af15d1494fa55d37c243dd8dd, type: 3}
   m_Name: 

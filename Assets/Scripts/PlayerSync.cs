@@ -27,6 +27,7 @@ public class PlayerSync : MonoBehaviour
     public GameSettings settings;
     public GameObject localPlayerObject;
     public GameObject dummyPlayerObject;
+    public AudioController audioController;
     float lastOrbitPos;
     [HideInInspector]
     public int playerID = 0;
@@ -47,6 +48,7 @@ public class PlayerSync : MonoBehaviour
         if (ownView.IsMine) {
             localPlayer = this;
             isLocal = true;
+            audioController.enabled = true;
         }
         else
         {
