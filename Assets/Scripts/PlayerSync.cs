@@ -10,7 +10,9 @@ public class PlayerSync : MonoBehaviour
     public static PlayerSync localPlayer, otherPlayer;
 
     public struct PlayerSate {
-        public int orbit;
+        public Vector3 currentOrbit;
+        public Vector2 orbitGoal;
+        public float speed;
     }
 
     PhotonView ownView;
@@ -19,8 +21,10 @@ public class PlayerSync : MonoBehaviour
     PlayerSate receivedState;
 
     // references
+    public GameSettings settings;
     public GameObject localPlayerObject;
     public GameObject dummyPlayerObject;
+    float lastOrbitPos;
 
     [HideInInspector]
     public bool isLocal = false;
@@ -58,16 +62,35 @@ public class PlayerSync : MonoBehaviour
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting) {
-            stream.SendNext(ownState.orbit);
+            stream.SendNext(ownState.orbitGoal);
+            stream.SendNext(ownState.currentOrbit);
+            stream.SendNext(ownState.speed);
         }
         else {
-            receivedState.orbit = (int)stream.ReceiveNext();
+            receivedState.orbitGoal = (Vector2)stream.ReceiveNext();
+            receivedState.currentOrbit = (Vector3)stream.ReceiveNext();
+            receivedState.speed = (float)stream.ReceiveNext();
+
+            double deltaTime = (PhotonNetwork.Time - info.SentServerTime)/1000d;
+            lastOrbitPos = receivedState.currentOrbit.z + receivedState.speed * (float)deltaTime;
         }
     }
 
     void Update()
     {
-        // Lerp state here (?)
-        ownState.orbit = receivedState.orbit;
+        if (isLocal)
+        {
+
+        }
+        else
+        {
+            // Lerp state here (?)
+            ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, ownState.orbitGoal.x, Time.deltaTime * 4f);
+            ownState.currentOrbit.y = Mathf.Lerp(ownState.currentOrbit.y, ownState.orbitGoal.y, Time.deltaTime * 4f);
+
+            ownState.speed = Mathf.Lerp(ownState.speed, receivedState.speed, Time.deltaTime * 4f);
+            lastOrbitPos += Time.deltaTime * receivedState.speed;
+            ownState.currentOrbit.z = Mathf.Lerp(ownState.currentOrbit.z + ownState.speed * Time.deltaTime, lastOrbitPos, Time.deltaTime * 4f);
+        }
     }
 }
