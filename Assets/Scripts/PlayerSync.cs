@@ -27,6 +27,7 @@ public class PlayerSync : MonoBehaviour
     public GameSettings settings;
     public GameObject localPlayerObject;
     public GameObject dummyPlayerObject;
+    public Photon.Voice.PUN.PhotonVoiceView voiceView;
     float lastOrbitPos;
     [HideInInspector]
     public int playerID = 0;

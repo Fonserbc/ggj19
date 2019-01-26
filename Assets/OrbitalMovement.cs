@@ -27,7 +27,7 @@ public class OrbitalMovement : MonoBehaviour {
 
         orbitChangeAngle = 360f / settings.longitudeDivisions;
 
-        orbitDistance = settings.radiuses[Mathf.Clamp(playerSync.playerID, 0, settings.radiuses.Length)];
+        orbitDistance = settings.radiuses[Mathf.Clamp(playerSync.playerID, 0, settings.radiuses.Length-1)];
 
         this.refOrbiter.transform.localPosition = new Vector3(0f, this.orbitDistance, 0f);
         this.refOrbiter.transform.rotation = Quaternion.LookRotation(-refOrbiter.transform.position.normalized, -Vector3.right);

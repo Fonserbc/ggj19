@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114024013839989562}
   - component: {fileID: 114993097666515066}
   - component: {fileID: 114251770185213326}
+  - component: {fileID: 114946316773294038}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -488,6 +489,7 @@ MonoBehaviour:
   settings: {fileID: 11400000, guid: 6c5e9672bbbf243a09f4023c139de870, type: 2}
   localPlayerObject: {fileID: 1645081672222668}
   dummyPlayerObject: {fileID: 1313166803892494}
+  voiceView: {fileID: 0}
   playerID: 0
   isLocal: 0
 --- !u!114 &114251770185213326
@@ -522,6 +524,20 @@ MonoBehaviour:
   playerSync: {fileID: 114024013839989562}
   refOrbiter: {fileID: 1326091601140610}
   refOrbit: {fileID: 1468413668630386}
+--- !u!114 &114946316773294038
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1157190374502916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b67490af15d1494fa55d37c243dd8dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  voiceView: {fileID: 114251770185213326}
+  voiceGroup: {fileID: 243755553598636128, guid: 5c09ec481f6024aaeb350985d5597ad9,
+    type: 2}
 --- !u!114 &114993097666515066
 MonoBehaviour:
   m_ObjectHideFlags: 1
