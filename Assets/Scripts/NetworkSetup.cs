@@ -1,151 +1,67 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Voice.Unity;
-using Photon.Realtime;
 using Photon.Pun;
+using Photon.Realtime;
+using Photon.Voice.Unity;
 
-[RequireComponent(typeof(VoiceConnection))]
-public class NetworkSetup : MonoBehaviour, IConnectionCallbacks, IMatchmakingCallbacks
+public class NetworkSetup : MonoBehaviourPunCallbacks
 {
 
     public int versionNumber = 0;
     public GameObject loadingScene;
     [Tooltip("This prefab needs to be in the Resources folder")]
     public PlayerSync playerPrefab;
+    public VoiceConnection voiceConnection;
 
-    private string roomName = "ggj19"; 
-    private RoomOptions roomOptions;
-    private TypedLobby typedLobby = TypedLobby.Default;
-
-    VoiceConnection voiceConnection;
-
-    void OnEnable()
+    void Start()
     {
-        if (voiceConnection == null)
-        {
-            voiceConnection = GetComponent<VoiceConnection>();
-        }
-        voiceConnection.Client.AddCallbackTarget(this);
         ConnectNow();
-    }
-
-    void OnDisable()
-    {
-        voiceConnection.Client.RemoveCallbackTarget(this);
     }
 
     void ConnectNow()
     {
         Debug.Log("Connecting to server");
-        roomOptions = new RoomOptions
-        {
-            MaxPlayers = 2
-        };
-
-        voiceConnection.ConnectUsingSettings();
-        voiceConnection.Client.AppVersion = versionNumber.ToString();
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.GameVersion = versionNumber.ToString();
+    }
+    public override void OnConnectedToMaster()
+    {
+        Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
+        PhotonNetwork.JoinRandomRoom();
     }
 
-#region MatchmakingCallbacks
-
-    public void OnCreatedRoom()
+    public override void OnJoinedLobby()
     {
-
+        Debug.Log("OnJoinedLobby(). This client is connected and does get a room-list, which gets stored as PhotonNetwork.GetRoomList(). This script now calls: PhotonNetwork.JoinRandomRoom();");
+        PhotonNetwork.JoinRandomRoom();
     }
 
-    public void OnCreateRoomFailed(short returnCode, string message)
+    public override void OnJoinRandomFailed(short returnCode, string message)
     {
-
+        Debug.Log("OnJoinRandomFailed() was called by PUN. No random room available, so we create one. Calling: PhotonNetwork.CreateRoom(null, new RoomOptions() {maxPlayers = 4}, null);");
+        PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = 2 }, null);
     }
 
-    public void OnFriendListUpdate(List<FriendInfo> friendList)
+    // the following methods are implemented to give you some context. re-implement them as needed.
+    public override void OnDisconnected(DisconnectCause cause)
     {
-
+        Debug.Log("OnDisconnected(" + cause + ")");
     }
 
-    public void OnJoinedRoom()
+    public override void OnJoinedRoom()
     {
+        Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room. From here on, your game would be running.");
         SetupScene();
     }
 
-    public void OnJoinRandomFailed(short returnCode, string message)
-    {
-        if (returnCode == ErrorCode.NoRandomMatchFound)
-        {
-            voiceConnection.Client.OpCreateRoom(new EnterRoomParams
-            {
-                RoomName = roomName,
-                RoomOptions = roomOptions,
-                Lobby = typedLobby
-            });
-        }
-        else
-        {
-            Debug.LogErrorFormat("OnJoinRandomFailed errorCode={0} errorMessage={1}", returnCode, message);
-        }
-    }
-
-    public void OnJoinRoomFailed(short returnCode, string message)
-    {
-        Debug.LogErrorFormat("OnJoinRoomFailed roomName={0} errorCode={1} errorMessage={2}", roomName, returnCode, message);
-    }
-
-    public void OnLeftRoom()
-    {
-
-    }
-
-#endregion
-
-#region ConnectionCallbacks
-
-    public void OnConnected()
-    {
-
-    }
-
-    public void OnConnectedToMaster()
-    {
-        voiceConnection.Client.OpJoinOrCreateRoom(
-            new EnterRoomParams {
-                RoomName = roomName,
-                RoomOptions = roomOptions,
-                Lobby = typedLobby
-        });
-    }
-
-    public void OnDisconnected(DisconnectCause cause)
-    {
-        if (cause == DisconnectCause.None || cause == DisconnectCause.DisconnectByClientLogic)
-        {
-            return;
-        }
-        Debug.LogErrorFormat("OnDisconnected cause={0}", cause);
-    }
-
-    public void OnRegionListReceived(RegionHandler regionHandler)
-    {
-
-    }
-
-    public void OnCustomAuthenticationResponse(Dictionary<string, object> data)
-    {
-
-    }
-
-    public void OnCustomAuthenticationFailed(string debugMessage)
-    {
-
-    }
-
-    #endregion
-
     void SetupScene()
     {
+        Debug.Log("Setting Up!");
+
         if (voiceConnection.PrimaryRecorder == null)
         {
-            voiceConnection.PrimaryRecorder = this.gameObject.AddComponent<Recorder>();
+            voiceConnection.PrimaryRecorder = voiceConnection.gameObject.AddComponent<Recorder>();
         }
         voiceConnection.PrimaryRecorder.TransmitEnabled = true;
         voiceConnection.PrimaryRecorder.Init(voiceConnection.VoiceClient);
@@ -154,5 +70,6 @@ public class NetworkSetup : MonoBehaviour, IConnectionCallbacks, IMatchmakingCal
         PlayerSync localPlayer = PhotonNetwork.Instantiate(playerPrefab.gameObject.name, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerSync>();
 
         localPlayer.Init();
+
     }
 }

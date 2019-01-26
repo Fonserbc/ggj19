@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 23582853683456260}
   - component: {fileID: 114024013839989562}
   - component: {fileID: 114993097666515066}
+  - component: {fileID: 114251770185213326}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -390,6 +391,23 @@ MonoBehaviour:
   localPlayerObject: {fileID: 1645081672222668}
   dummyPlayerObject: {fileID: 1313166803892494}
   isLocal: 0
+--- !u!114 &114251770185213326
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1157190374502916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logLevel: 1
+  recorderInUse: {fileID: 0}
+  speakerInUse: {fileID: 0}
+  AutoCreateRecorderIfNotFound: 0
+  UsePrimaryRecorder: 1
+  SetupDebugSpeaker: 1
 --- !u!114 &114993097666515066
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -409,7 +427,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   viewIdField: 0
-  InstantiationId: 2
+  InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!124 &124628823985362142
 Behaviour:

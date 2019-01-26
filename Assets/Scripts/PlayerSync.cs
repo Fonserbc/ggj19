@@ -51,6 +51,8 @@ public class PlayerSync : MonoBehaviour
 
         localPlayerObject.SetActive(isLocal);
         dummyPlayerObject.SetActive(!isLocal);
+
+        Debug.Log("Player initialized!");
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
