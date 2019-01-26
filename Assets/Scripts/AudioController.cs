@@ -23,6 +23,10 @@ public class AudioController : MonoBehaviour {
 
     public float pitchFactor = 10f;
 
+    public float minWinTime = 4f;
+    bool won = false;
+    float winTime = 0f;
+
     float lastDistance = 0f;
     float maxDistance = 0f;
 
@@ -63,9 +67,20 @@ public class AudioController : MonoBehaviour {
                 fmodEventEmmiter.SetParameter("Polarity", fmodPolarity);
                 fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f + 1f;
 
-                fmodEventEmmiter.SetParameter("Distance", fmodDistance);
+                if (fmodDistance < 2f) {
+                    winTime += Time.deltaTime;
 
-                Debug.Log(fmodPolarity + " " + fmodDistance);
+                    if (winTime >= minWinTime) {
+                        Debug.Log("WIN!");
+                        PlayerSync.localPlayer.ownState.won = true;
+                    }
+                }
+                else {
+                    winTime = 0f;
+                    PlayerSync.localPlayer.ownState.won = false;
+                }
+
+                fmodEventEmmiter.SetParameter("Distance", fmodDistance);
 
                 //if (softenedSpeed > 0 && speed > softenedSpeed) softenedSpeed = speed;
                 //else if (softenedSpeed < 0 && speed < softenedSpeed) softenedSpeed = speed;

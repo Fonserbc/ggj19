@@ -672,6 +672,7 @@ MonoBehaviour:
   doPitchDistortion: 1
   doVolumeDrop: 1
   pitchFactor: 100
+  minWinTime: 4
 --- !u!114 &114981610065984280
 MonoBehaviour:
   m_ObjectHideFlags: 1
