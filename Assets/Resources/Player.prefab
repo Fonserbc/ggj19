@@ -557,7 +557,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  pitchFactor: 200
+  pitchFactor: 100
 --- !u!114 &114993097666515066
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -576,7 +576,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 0
+  viewIdField: 1
   InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!124 &124628823985362142

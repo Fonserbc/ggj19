@@ -42,9 +42,7 @@ public class AudioController : MonoBehaviour {
 
                 float speed = (currentDistance - lastDistance)/maxDistance;
 
-                Debug.Log(speed + " " + (speed * pitchFactor));
-
-                voiceMixer.SetFloat("ReceivedVoicePitch", speed * pitchFactor);
+                voiceMixer.SetFloat("ReceivedVoicePitch", Mathf.Clamp(speed * pitchFactor, -0.5f, 2f));
                 voiceMixer.SetFloat("ReceivedVoiceVolume", volumeDropCurve.Evaluate(Mathf.Clamp01(currentDistance / maxDistance)));
 
                 lastDistance = currentDistance;

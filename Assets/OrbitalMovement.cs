@@ -67,12 +67,12 @@ public class OrbitalMovement : MonoBehaviour {
         }
 
         playerSync.ownState.orbitGoal = orbitAngle;
-        playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
     }
 
     // Update the object "position" by simply updating the angle
     private void UpdateRotation()
     {
+        playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
         playerSync.UpdateState();
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
     }
