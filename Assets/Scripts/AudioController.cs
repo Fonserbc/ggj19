@@ -11,6 +11,10 @@ public class AudioController : MonoBehaviour {
     public AudioMixerGroup voiceGroup;
     public AudioMixer voiceMixer;
     public AnimationCurve volumeDropCurve;
+    public FMODUnity.StudioEventEmitter fmodEventEmmiter;
+
+    float fmodPolarity = 0f;
+    float fmodDistance = 0f;
 
     public bool doPitchDistortion = false;
     public bool doVolumeDrop = false;
@@ -47,12 +51,21 @@ public class AudioController : MonoBehaviour {
             if (PlayerSync.otherPlayer != null) {
                 float currentDistance = Vector3.Distance(PlayerSync.otherPlayer.dummyPlayerObject.transform.position, PlayerSync.localPlayer.localPlayerObject.transform.position);
 
-                float speed = (currentDistance - lastDistance)/maxDistance * pitchFactor;
+                float distanceFactor = (currentDistance - lastDistance) / maxDistance;
+                float speed = distanceFactor * pitchFactor;
                 float softFactor = 0.9f;
                 softenedSpeed = softenedSpeed * softFactor + speed * (1f - softFactor);
 
                 minSpeed = Mathf.Min(minSpeed, softenedSpeed);
                 maxSpeed = Mathf.Max(maxSpeed, softenedSpeed);
+
+                fmodPolarity = Mathf.Sign(softenedSpeed);
+                fmodEventEmmiter.SetParameter("Polarity", fmodPolarity);
+                fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f + 1f;
+
+                fmodEventEmmiter.SetParameter("Distance", fmodDistance);
+
+                Debug.Log(fmodPolarity + " " + fmodDistance);
 
                 //if (softenedSpeed > 0 && speed > softenedSpeed) softenedSpeed = speed;
                 //else if (softenedSpeed < 0 && speed < softenedSpeed) softenedSpeed = speed;
@@ -80,6 +93,9 @@ public class AudioController : MonoBehaviour {
             else {
                 voiceMixer.SetFloat("ReceivedVoicePitch", 1f);
                 voiceMixer.SetFloat("ReceivedVoiceVolume", -80f);
+
+                fmodEventEmmiter.SetParameter("Distance", 100f);
+                fmodEventEmmiter.SetParameter("Polarity", 1);
             }
         }
     }
