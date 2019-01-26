@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OrbitalMovement : MonoBehaviour {
 
     public GameSettings settings;
     public PlayerSync playerSync;
-
+    public Text message;
     float orbitDistance;
     float orbitChangeAngle;
     float[] orbitSpeeds;
@@ -56,6 +57,7 @@ public class OrbitalMovement : MonoBehaviour {
         {
             //this.orbitAngle.x -= orbitChangeAngle;
             this.orbitAngle.y -= (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
+            this.StartCoroutine(this.Message("                     >"));
         }
 
         // Change Y axis to the right
@@ -64,6 +66,7 @@ public class OrbitalMovement : MonoBehaviour {
 
             //this.orbitAngle.x += orbitChangeAngle;
             this.orbitAngle.y += (this.refOrbit.transform.localEulerAngles.z  < 180f) ? orbitChangeAngle : -orbitChangeAngle;
+            this.StartCoroutine(this.Message("<                     "));
         }
 
         playerSync.ownState.orbitGoal = orbitAngle;
@@ -77,5 +80,15 @@ public class OrbitalMovement : MonoBehaviour {
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
         playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+    }
+
+    private IEnumerator Message(string text)
+    {
+        if (this.message)
+        {
+            this.message.text = text;
+            yield return new WaitForSeconds(1f);
+            this.message.text = "";
+        }
     }
 }
