@@ -12,6 +12,9 @@ public class AudioController : MonoBehaviour {
     public AudioMixer voiceMixer;
     public AnimationCurve volumeDropCurve;
 
+    public bool doPitchDistortion = false;
+    public bool doVolumeDrop = false;
+
     AudioSource audioSource = null;
 
     public float pitchFactor = 10f;
@@ -42,8 +45,21 @@ public class AudioController : MonoBehaviour {
 
                 float speed = (currentDistance - lastDistance)/maxDistance;
 
-                voiceMixer.SetFloat("ReceivedVoicePitch", Mathf.Clamp(speed * pitchFactor, -0.5f, 2f));
-                voiceMixer.SetFloat("ReceivedVoiceVolume", volumeDropCurve.Evaluate(Mathf.Clamp01(currentDistance / maxDistance)));
+                if (doPitchDistortion)
+                {
+                    voiceMixer.SetFloat("ReceivedVoicePitch", Mathf.Clamp(speed * pitchFactor, -0.5f, 2f));
+                }
+                else {
+                    voiceMixer.SetFloat("ReceivedVoicePitch", 1f);
+                }
+
+                if (doVolumeDrop)
+                {
+                    voiceMixer.SetFloat("ReceivedVoiceVolume", volumeDropCurve.Evaluate(Mathf.Clamp01(currentDistance / maxDistance)));
+                }
+                else {
+                    voiceMixer.SetFloat("ReceivedVoiceVolume", 0f);
+                }
 
                 lastDistance = currentDistance;
             }
