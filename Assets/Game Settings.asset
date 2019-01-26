@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Name: Game Settings
   m_EditorClassIdentifier: 
   longitudeDivisions: 12
-  speedPeriods: 140000000f0000000a00000005000000
+  speedPeriods: 2800000023000000140000000f000000
   radiuses: 1300000014000000

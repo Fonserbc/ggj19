@@ -27,7 +27,7 @@ public class OrbitalMovement : MonoBehaviour {
 
         orbitChangeAngle = 360f / settings.longitudeDivisions;
 
-        orbitDistance = settings.radiuses[Mathf.Clamp(playerSync.playerID, 0, settings.radiuses.Length)];
+        orbitDistance = settings.radiuses[Mathf.Clamp(playerSync.playerID, 0, settings.radiuses.Length-1)];
 
         this.refOrbiter.transform.localPosition = new Vector3(0f, this.orbitDistance, 0f);
         this.refOrbiter.transform.rotation = Quaternion.LookRotation(-refOrbiter.transform.position.normalized, -Vector3.right);
@@ -35,7 +35,7 @@ public class OrbitalMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        this.UpdateInput();
+        if (playerSync.isLocal) this.UpdateInput();
         this.UpdateRotation();
     }
 
@@ -55,7 +55,7 @@ public class OrbitalMovement : MonoBehaviour {
         if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
         {
             //this.orbitAngle.x -= orbitChangeAngle;
-            this.orbitAngle.y -= orbitChangeAngle * ((int)playerSync.ownState.currentOrbit.z % 180 == 0? 1f : -1f);
+            this.orbitAngle.y -= (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
         }
 
         // Change Y axis to the right
@@ -63,19 +63,19 @@ public class OrbitalMovement : MonoBehaviour {
         {
 
             //this.orbitAngle.x += orbitChangeAngle;
-            this.orbitAngle.y += orbitChangeAngle * ((int)playerSync.ownState.currentOrbit.z % 180 == 0 ? 1f : -1f); ;
+            this.orbitAngle.y += (this.refOrbit.transform.localEulerAngles.z  < 180f) ? orbitChangeAngle : -orbitChangeAngle;
         }
 
+        playerSync.ownState.orbitGoal = orbitAngle;
     }
 
     // Update the object "position" by simply updating the angle
     private void UpdateRotation()
     {
-        playerSync.ownState.orbitGoal = orbitAngle;
         playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
-
         playerSync.UpdateState();
-
+        this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+        playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
     }
 }

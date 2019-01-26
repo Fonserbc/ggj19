@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 
 [RequireComponent(typeof(PhotonView))]
-public class PlayerSync : MonoBehaviour
+public class PlayerSync : MonoBehaviour, IPunObservable
 {
 
     public static PlayerSync localPlayer, otherPlayer;
@@ -27,6 +27,7 @@ public class PlayerSync : MonoBehaviour
     public GameSettings settings;
     public GameObject localPlayerObject;
     public GameObject dummyPlayerObject;
+    public AudioController audioController;
     float lastOrbitPos;
     [HideInInspector]
     public int playerID = 0;
@@ -34,12 +35,20 @@ public class PlayerSync : MonoBehaviour
     [HideInInspector]
     public bool isLocal = false;
 
+    bool initialized = false;
+
+    private void Start()
+    {
+        if (!initialized) Init();
+    }
+
     public void Init() {
         ownView = GetComponent<PhotonView>();
 
         if (ownView.IsMine) {
             localPlayer = this;
             isLocal = true;
+            audioController.enabled = true;
         }
         else
         {
@@ -52,6 +61,7 @@ public class PlayerSync : MonoBehaviour
         localPlayerObject.SetActive(isLocal);
         dummyPlayerObject.SetActive(!isLocal);
 
+        initialized = true;
         Debug.Log("Player initialized!");
     }
 
@@ -74,11 +84,6 @@ public class PlayerSync : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!isLocal) UpdateState();
-    }
-
     public void UpdateState()
     {
         if (isLocal)
@@ -92,13 +97,23 @@ public class PlayerSync : MonoBehaviour
         else
         {
             // Lerp state here (?)
-            ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, ownState.orbitGoal.x, Time.deltaTime * 4f);
-            ownState.currentOrbit.y = Mathf.Lerp(ownState.currentOrbit.y, ownState.orbitGoal.y, Time.deltaTime * 4f);
+            ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, receivedState.orbitGoal.x, Time.deltaTime * 4f);
+            ownState.currentOrbit.y = Mathf.Lerp(ownState.currentOrbit.y, receivedState.orbitGoal.y, Time.deltaTime * 4f);
 
             ownState.currentSpeed = Mathf.Lerp(ownState.currentSpeed, receivedState.speedGoal, Time.deltaTime * 4f);
             receivedState.currentSpeed = Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, Time.deltaTime * 4f);
             lastOrbitPos += Time.deltaTime * receivedState.currentSpeed;
             ownState.currentOrbit.z = Mathf.Lerp(ownState.currentOrbit.z + ownState.currentSpeed * Time.deltaTime, lastOrbitPos, Time.deltaTime * 4f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (localPlayer == this) {
+            localPlayer = null;
+        }
+        if (otherPlayer == this) {
+            otherPlayer = null;
         }
     }
 }

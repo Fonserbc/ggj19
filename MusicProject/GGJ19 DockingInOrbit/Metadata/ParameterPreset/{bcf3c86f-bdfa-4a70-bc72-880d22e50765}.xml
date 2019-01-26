@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="ParameterPreset" id="{bcf3c86f-bdfa-4a70-bc72-880d22e50765}">
+        <property name="name">
+            <value>Polarity</value>
+        </property>
+        <relationship name="folder">
+            <destination>{79c68c4d-4642-41d4-86ac-4b1e968e039d}</destination>
+        </relationship>
+        <relationship name="parameter">
+            <destination>{b3df9ffe-6d4e-4509-897d-cc65b9da3822}</destination>
+        </relationship>
+    </object>
+    <object class="GameParameter" id="{b3df9ffe-6d4e-4509-897d-cc65b9da3822}">
+        <property name="minimum">
+            <value>-1</value>
+        </property>
+        <property name="initialValue">
+            <value>-1</value>
+        </property>
+    </object>
+</objects>
