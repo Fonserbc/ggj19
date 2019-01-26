@@ -36,6 +36,8 @@ public class OrbitalMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (Logic.won) return;
+
         if (playerSync.isLocal) this.UpdateInput();
         this.UpdateRotation();
     }
