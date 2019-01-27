@@ -29,11 +29,11 @@ public class OrbitalMovement : MonoBehaviour {
     void Start() {
 
         orbitSpeeds = new float[3];
-        int speedShift = playerSync.playerID == 1 ? 0 : 1;
+        int playerShift = playerSync.playerID == 1 ? 0 : 1;
 
-        for (int i = speedShift; i < orbitSpeeds.Length; ++i)
+        for (int i = 0; i < orbitSpeeds.Length; ++i)
         {
-            orbitSpeeds[i] = 360f / settings.speedPeriods[i];
+            orbitSpeeds[i] = 360f / settings.speedPeriods[i + playerShift];
         }
 
         orbitChangeAngle = 360f / settings.longitudeDivisions;
@@ -45,6 +45,12 @@ public class OrbitalMovement : MonoBehaviour {
         this.speed.text = "";
         directionLeft.text = "";
         directionRight.text = "";
+
+        orbitSpeedIndex = 1;
+        playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
+
+        orbitAngle.y = playerShift * orbitChangeAngle * Mathf.FloorToInt(settings.longitudeDivisions / 4);
+        playerSync.ownState.orbitGoal = orbitAngle;
     }
 
     // Update is called once per frame

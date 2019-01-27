@@ -66,6 +66,7 @@ public class PlayerSync : MonoBehaviour, IPunObservable
         Debug.Log("Player initialized!");
     }
 
+    float maxDeltaTime = Mathf.NegativeInfinity;
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting) {
@@ -82,8 +83,10 @@ public class PlayerSync : MonoBehaviour, IPunObservable
             receivedState.speedGoal = (float)stream.ReceiveNext();
             ownState.won = receivedState.won = (bool)stream.ReceiveNext();
 
-            double deltaTime = (PhotonNetwork.Time - info.SentServerTime)/1000d;
-            lastOrbitPos = receivedState.currentOrbit.z + Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, 0.5f) * (float)deltaTime;
+            float deltaTime = Mathf.Max(0, (float) ((PhotonNetwork.Time - info.SentServerTime)/1000d));
+            maxDeltaTime = Mathf.Max(maxDeltaTime, deltaTime);
+            //Debug.Log(deltaTime + "<= "+maxDeltaTime);
+            lastOrbitPos = receivedState.currentOrbit.z + Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, 0.5f) * deltaTime;
         }
     }
 
