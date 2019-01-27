@@ -29,8 +29,10 @@ public class OrbitalMovement : MonoBehaviour {
     // Use this for initialization
     void Start() {
 
-        orbitSpeeds = new float[settings.speedPeriods.Length];
-        for (int i = 0; i < orbitSpeeds.Length; ++i)
+        orbitSpeeds = new float[3];
+        int speedShift = playerSync.playerID == 1 ? 0 : 1;
+
+        for (int i = speedShift; i < orbitSpeeds.Length; ++i)
         {
             orbitSpeeds[i] = 360f / settings.speedPeriods[i];
         }
