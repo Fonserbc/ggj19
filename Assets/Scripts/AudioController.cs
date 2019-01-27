@@ -13,6 +13,10 @@ public class AudioController : MonoBehaviour {
     public AnimationCurve volumeDropCurve;
     public FMODUnity.StudioEventEmitter fmodEventEmmiter;
 
+    public GameObject holdPositionObject;
+    public GameObject canWinObject;
+    public GameObject holdToWinObject;
+
     float fmodPolarity = 0f;
     float fmodDistance = 0f;
 
@@ -24,7 +28,7 @@ public class AudioController : MonoBehaviour {
     public float pitchFactor = 10f;
 
     public float minWinTime = 4f;
-    bool won = false;
+    bool canWin = false;
     float winTime = 0f;
 
     float lastDistance = 0f;
@@ -67,18 +71,28 @@ public class AudioController : MonoBehaviour {
                 fmodEventEmmiter.SetParameter("Polarity", fmodPolarity);
                 fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f;
 
-                if (fmodDistance < 1f + Mathf.Abs(settings.innerRadius - settings.outerRadius)) { // 2 is because we are 
-                    winTime += Time.deltaTime;
-
-                    if (winTime >= minWinTime) {
-                        Debug.Log("WIN!");
-                        PlayerSync.localPlayer.ownState.won = true;
-                    }
+                if (fmodDistance < 1.5f + Mathf.Abs(settings.innerRadius - settings.outerRadius)) {
+                    winTime = Mathf.Min(minWinTime * 1.5f, winTime + Time.deltaTime);
+                    holdPositionObject.SetActive(!canWin);
                 }
                 else {
                     winTime = Mathf.Max(0f, winTime - Time.deltaTime * 2f);
-                    PlayerSync.localPlayer.ownState.won = false;
+                    holdPositionObject.SetActive(false);
                 }
+
+                if (winTime >= minWinTime)
+                {
+                    Debug.Log("Can WIN!");
+                    canWin = true;
+                }
+                else {
+                    canWin = false;
+                }
+
+                bool spaceDown = Input.GetKeyDown(KeyCode.Space);
+                canWinObject.SetActive(canWin && !spaceDown);
+                holdToWinObject.SetActive(canWin && spaceDown);
+                PlayerSync.localPlayer.ownState.won = canWin && spaceDown;
 
                 fmodEventEmmiter.SetParameter("Distance", fmodDistance);
 
