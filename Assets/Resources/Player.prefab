@@ -1973,6 +1973,7 @@ MonoBehaviour:
   message: {fileID: 114334218200462296}
   direction: {fileID: 114122137632555300}
   speed: {fileID: 114971975685115190}
+  inputCooldown: 1
 --- !u!114 &114862702669131464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2077,6 +2078,8 @@ MonoBehaviour:
   holdPositionObject: {fileID: 1589823974163334}
   canWinObject: {fileID: 1964915330680178}
   holdToWinObject: {fileID: 1267924860235454}
+  minPitch: 0.5
+  maxPitch: 2
   doPitchDistortion: 1
   doVolumeDrop: 1
   pitchFactor: 100
