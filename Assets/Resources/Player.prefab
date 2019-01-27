@@ -1283,7 +1283,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 776651a37464e4f61b79794099f1791d, type: 2}
+  - {fileID: 2100000, guid: 69c0d7b4bc7bd440881331e1225a9c93, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1385,7 +1385,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 776651a37464e4f61b79794099f1791d, type: 2}
+  - {fileID: 2100000, guid: 2a35cfa32fa1b409d8e661e328d6da36, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1676,7 +1676,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 7
+  m_Intensity: 5
   m_Range: 11.055717
   m_SpotAngle: 72.67318
   m_CookieSize: 10
