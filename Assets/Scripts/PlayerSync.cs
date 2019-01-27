@@ -14,6 +14,7 @@ public class PlayerSync : MonoBehaviour, IPunObservable
         public Vector2 orbitGoal;
         public float currentSpeed;
         public float speedGoal;
+        public bool won;
     }
 
     PhotonView ownView;
@@ -72,12 +73,14 @@ public class PlayerSync : MonoBehaviour, IPunObservable
             stream.SendNext(ownState.currentOrbit);
             stream.SendNext(ownState.currentSpeed);
             stream.SendNext(ownState.speedGoal);
+            stream.SendNext(ownState.won);
         }
         else {
             receivedState.orbitGoal = (Vector2)stream.ReceiveNext();
             receivedState.currentOrbit = (Vector3)stream.ReceiveNext();
             receivedState.currentSpeed = (float)stream.ReceiveNext();
             receivedState.speedGoal = (float)stream.ReceiveNext();
+            ownState.won = receivedState.won = (bool)stream.ReceiveNext();
 
             double deltaTime = (PhotonNetwork.Time - info.SentServerTime)/1000d;
             lastOrbitPos = receivedState.currentOrbit.z + Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, 0.5f) * (float)deltaTime;
@@ -104,6 +107,13 @@ public class PlayerSync : MonoBehaviour, IPunObservable
             receivedState.currentSpeed = Mathf.Lerp(receivedState.currentSpeed, receivedState.speedGoal, Time.deltaTime * 4f);
             lastOrbitPos += Time.deltaTime * receivedState.currentSpeed;
             ownState.currentOrbit.z = Mathf.Lerp(ownState.currentOrbit.z + ownState.currentSpeed * Time.deltaTime, lastOrbitPos, Time.deltaTime * 4f);
+
+            if (ownState.won) {
+                dummyPlayerObject.transform.localScale = Vector3.Slerp(dummyPlayerObject.transform.localScale, Vector3.one * 2f, Time.deltaTime);
+            }
+            else {
+                dummyPlayerObject.transform.localScale = Vector3.Slerp(dummyPlayerObject.transform.localScale, Vector3.one, Time.deltaTime);
+            }
         }
     }
 

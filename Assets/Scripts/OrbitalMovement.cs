@@ -1,20 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OrbitalMovement : MonoBehaviour {
 
     public GameSettings settings;
     public PlayerSync playerSync;
-
+    
     float orbitDistance;
     float orbitChangeAngle;
     float[] orbitSpeeds;
 
     private Vector3 orbitAngle;
     private int orbitSpeedIndex;
+    private bool isDockReady;
     public GameObject refOrbiter;
     public GameObject refOrbit;
+
+    [Space]
+    public Text message;
+    public Text direction;
+    public Text speed;
 
     // Use this for initialization
     void Start() {
@@ -27,7 +34,7 @@ public class OrbitalMovement : MonoBehaviour {
 
         orbitChangeAngle = 360f / settings.longitudeDivisions;
 
-        orbitDistance = settings.radiuses[Mathf.Clamp(playerSync.playerID, 0, settings.radiuses.Length-1)];
+        orbitDistance = playerSync.isLocal ? settings.outerRadius : settings.innerRadius;
 
         this.refOrbiter.transform.localPosition = new Vector3(0f, this.orbitDistance, 0f);
         this.refOrbiter.transform.rotation = Quaternion.LookRotation(-refOrbiter.transform.position.normalized, -Vector3.right);
@@ -35,27 +42,37 @@ public class OrbitalMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (playerSync.isLocal) this.UpdateInput();
+        if (!Logic.won && playerSync.isLocal) this.UpdateInput();
         this.UpdateRotation();
+        this.UpdateDockMessage();
     }
 
     private void UpdateInput()
     {
         // Speed up
         if (Input.GetKeyDown("w") || Input.GetKeyDown("up"))
+        {
             if (this.orbitSpeedIndex < (this.orbitSpeeds.Length - 1))
                 this.orbitSpeedIndex++;
 
+            this.StartCoroutine(this.Speed(this.orbitSpeedIndex));
+        }
+
         // Speed down
         if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
+        {
             if (this.orbitSpeedIndex > 0f)
                 this.orbitSpeedIndex--;
+
+            this.StartCoroutine(this.Speed(this.orbitSpeedIndex));
+        }
 
         // Change Y axis to the left
         if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
         {
             //this.orbitAngle.x -= orbitChangeAngle;
             this.orbitAngle.y -= (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
+            this.StartCoroutine(this.Directions("<                           "));
         }
 
         // Change Y axis to the right
@@ -64,6 +81,7 @@ public class OrbitalMovement : MonoBehaviour {
 
             //this.orbitAngle.x += orbitChangeAngle;
             this.orbitAngle.y += (this.refOrbit.transform.localEulerAngles.z  < 180f) ? orbitChangeAngle : -orbitChangeAngle;
+            this.StartCoroutine(this.Directions("                           >"));
         }
 
         playerSync.ownState.orbitGoal = orbitAngle;
@@ -77,5 +95,40 @@ public class OrbitalMovement : MonoBehaviour {
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
         playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+    }
+
+    private void UpdateDockMessage()
+    {
+        if (this.isDockReady)
+        {
+            if (this.message.text.Length == 0)
+                this.message.text = "PRESS SPACE TO DOCK";
+        }
+        else if (this.message.text.Length > 0)
+            this.message.text = "";
+    }
+
+    private IEnumerator Directions(string text)
+    {
+        if (this.direction)
+        {
+            this.direction.text = text;
+            yield return new WaitForSeconds(1f);
+            this.direction.text = "";
+        }
+    }
+
+    private IEnumerator Speed(int speedIndex)
+    {
+        string text = "";
+        for (int i = -1; i < speedIndex; i++)
+            text += ">";
+
+        if (this.speed)
+        {
+            this.speed.text = text;
+            yield return new WaitForSeconds(1f);
+            this.speed.text = "";
+        }
     }
 }

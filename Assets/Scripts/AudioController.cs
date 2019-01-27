@@ -13,6 +13,10 @@ public class AudioController : MonoBehaviour {
     public AnimationCurve volumeDropCurve;
     public FMODUnity.StudioEventEmitter fmodEventEmmiter;
 
+    public GameObject holdPositionObject;
+    public GameObject canWinObject;
+    public GameObject holdToWinObject;
+
     float fmodPolarity = 0f;
     float fmodDistance = 0f;
 
@@ -23,6 +27,10 @@ public class AudioController : MonoBehaviour {
 
     public float pitchFactor = 10f;
 
+    public float minWinTime = 4f;
+    bool canWin = false;
+    float winTime = 0f;
+
     float lastDistance = 0f;
     float maxDistance = 0f;
 
@@ -32,7 +40,7 @@ public class AudioController : MonoBehaviour {
         {
             FindAudioSource();
         }
-        maxDistance = settings.radiuses[0] + settings.radiuses[1];
+        maxDistance = settings.innerRadius + settings.outerRadius;
     }
 
     float minSpeed = Mathf.Infinity;
@@ -61,11 +69,32 @@ public class AudioController : MonoBehaviour {
 
                 fmodPolarity = Mathf.Sign(softenedSpeed);
                 fmodEventEmmiter.SetParameter("Polarity", fmodPolarity);
-                fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f + 1f;
+                fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f;
+
+                if (currentDistance < 1.5f + Mathf.Abs(settings.innerRadius - settings.outerRadius)) {
+                    winTime = Mathf.Min(minWinTime * 1.5f, winTime + Time.deltaTime);
+                    holdPositionObject.SetActive(!canWin);
+                }
+                else {
+                    winTime = Mathf.Max(0f, winTime - Time.deltaTime * 2f);
+                    holdPositionObject.SetActive(false);
+                }
+
+                if (winTime >= minWinTime)
+                {
+                    Debug.Log("Can WIN!");
+                    canWin = true;
+                }
+                else {
+                    canWin = false;
+                }
+
+                bool spaceDown = Input.GetKey(KeyCode.Space);
+                canWinObject.SetActive(canWin && !spaceDown);
+                holdToWinObject.SetActive(canWin && spaceDown);
+                PlayerSync.localPlayer.ownState.won = canWin && spaceDown;
 
                 fmodEventEmmiter.SetParameter("Distance", fmodDistance);
-
-                Debug.Log(fmodPolarity + " " + fmodDistance);
 
                 //if (softenedSpeed > 0 && speed > softenedSpeed) softenedSpeed = speed;
                 //else if (softenedSpeed < 0 && speed < softenedSpeed) softenedSpeed = speed;
@@ -96,6 +125,10 @@ public class AudioController : MonoBehaviour {
 
                 fmodEventEmmiter.SetParameter("Distance", 100f);
                 fmodEventEmmiter.SetParameter("Polarity", 1);
+
+                holdPositionObject.SetActive(false);
+                canWinObject.SetActive(false);
+                holdToWinObject.SetActive(false);
             }
         }
     }
