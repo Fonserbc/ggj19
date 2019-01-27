@@ -10,13 +10,15 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
 
     public int versionNumber = 0;
     public GameObject loadingScene;
+    public GameObject tutorialScene;
     [Tooltip("This prefab needs to be in the Resources folder")]
     public PlayerSync playerPrefab;
     public VoiceConnection voiceConnection;
 
-    void Start()
+    private void Start()
     {
-        ConnectNow();
+        loadingScene.gameObject.SetActive(false);
+        tutorialScene.gameObject.SetActive(true);
     }
 
     void ConnectNow()
@@ -24,6 +26,8 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
         Debug.Log("Connecting to server");
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.GameVersion = versionNumber.ToString();
+        loadingScene.gameObject.SetActive(true);
+        tutorialScene.gameObject.SetActive(false);
     }
     public override void OnConnectedToMaster()
     {
@@ -71,5 +75,12 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
 
         localPlayer.Init();
 
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && !PhotonNetwork.IsConnected) {
+            ConnectNow();
+        }
     }
 }

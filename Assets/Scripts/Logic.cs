@@ -16,7 +16,7 @@ public class Logic : MonoBehaviour {
                 winObject.SetActive(true);
                 enabled = false;
 
-                PlayerSync.otherPlayer.transform.SetParent(PlayerSync.localPlayer.transform);
+                PlayerSync.otherPlayer.transform.SetParent(PlayerSync.localPlayer.GetComponent<OrbitalMovement>().refOrbiter.transform);
             }
         }
     }
