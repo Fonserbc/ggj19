@@ -65,9 +65,9 @@ public class AudioController : MonoBehaviour {
 
                 fmodPolarity = Mathf.Sign(softenedSpeed);
                 fmodEventEmmiter.SetParameter("Polarity", fmodPolarity);
-                fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f + 1f;
+                fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f;
 
-                if (fmodDistance < 2f + Mathf.Abs(settings.innerRadius - settings.outerRadius)) { // 2 is because we are +1 up there
+                if (fmodDistance < 1f + Mathf.Abs(settings.innerRadius - settings.outerRadius)) { // 2 is because we are 
                     winTime += Time.deltaTime;
 
                     if (winTime >= minWinTime) {
@@ -76,7 +76,7 @@ public class AudioController : MonoBehaviour {
                     }
                 }
                 else {
-                    winTime = 0f;
+                    winTime = Mathf.Max(0f, winTime - Time.deltaTime * 2f);
                     PlayerSync.localPlayer.ownState.won = false;
                 }
 
