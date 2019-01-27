@@ -19,8 +19,7 @@ public class OrbitalMovement : MonoBehaviour {
     public GameObject refOrbit;
 
     [Space]
-    public Text message;
-    public Text direction;
+    public Text directionRight, directionLeft;
     public Text speed;
 
     public float inputCooldown = 1f;
@@ -43,13 +42,15 @@ public class OrbitalMovement : MonoBehaviour {
 
         this.refOrbiter.transform.localPosition = new Vector3(0f, this.orbitDistance, 0f);
         this.refOrbiter.transform.rotation = Quaternion.LookRotation(-refOrbiter.transform.position.normalized, -Vector3.right);
+        this.speed.text = "";
+        directionLeft.text = "";
+        directionRight.text = "";
     }
 
     // Update is called once per frame
     void Update() {
         if (!Logic.won && playerSync.isLocal) this.UpdateInput();
         this.UpdateRotation();
-        this.UpdateDockMessage();
     }
 
     private void UpdateInput()
@@ -83,7 +84,7 @@ public class OrbitalMovement : MonoBehaviour {
             {
                 //this.orbitAngle.x -= orbitChangeAngle;
                 this.orbitAngle.y -= (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
-                this.StartCoroutine(this.Directions("< Adjusting Orbit West"));
+                this.StartCoroutine(this.Directions(directionLeft, "< ORBIT " + orbitChangeAngle + "°W"));
                 lastInputTimeAcc = inputCooldown;
             }
 
@@ -93,7 +94,7 @@ public class OrbitalMovement : MonoBehaviour {
 
                 //this.orbitAngle.x += orbitChangeAngle;
                 this.orbitAngle.y += (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
-                this.StartCoroutine(this.Directions("Adjusting Orbit East >"));
+                this.StartCoroutine(this.Directions(directionRight, "ORBIT "+ orbitChangeAngle + "°E >"));
                 lastInputTimeAcc = inputCooldown;
             }
         }
@@ -106,7 +107,7 @@ public class OrbitalMovement : MonoBehaviour {
     {
         playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
         playerSync.UpdateState();
-        if (playerSync.isLocal || Logic.won)
+        if (playerSync.isLocal || !Logic.won)
         {
             this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
             playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
@@ -114,25 +115,11 @@ public class OrbitalMovement : MonoBehaviour {
         }
     }
 
-    private void UpdateDockMessage()
+    private IEnumerator Directions(Text display, string text)
     {
-        if (this.isDockReady)
-        {
-            if (this.message.text.Length == 0)
-                this.message.text = "PRESS SPACE TO DOCK";
-        }
-        else if (this.message.text.Length > 0)
-            this.message.text = "";
-    }
-
-    private IEnumerator Directions(string text)
-    {
-        if (this.direction)
-        {
-            this.direction.text = text;
-            yield return new WaitForSeconds(1f);
-            this.direction.text = "";
-        }
+        display.text = text;
+        yield return new WaitForSeconds(1f);
+        display.text = "";
     }
 
     private IEnumerator Speed(int speedIndex)
