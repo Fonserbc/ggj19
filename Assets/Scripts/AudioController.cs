@@ -71,7 +71,7 @@ public class AudioController : MonoBehaviour {
                 fmodEventEmmiter.SetParameter("Polarity", fmodPolarity);
                 fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f;
 
-                if (fmodDistance < 1.5f + Mathf.Abs(settings.innerRadius - settings.outerRadius)) {
+                if (currentDistance < 1.5f + Mathf.Abs(settings.innerRadius - settings.outerRadius)) {
                     winTime = Mathf.Min(minWinTime * 1.5f, winTime + Time.deltaTime);
                     holdPositionObject.SetActive(!canWin);
                 }
@@ -125,6 +125,10 @@ public class AudioController : MonoBehaviour {
 
                 fmodEventEmmiter.SetParameter("Distance", 100f);
                 fmodEventEmmiter.SetParameter("Polarity", 1);
+
+                holdPositionObject.SetActive(false);
+                canWinObject.SetActive(false);
+                holdToWinObject.SetActive(false);
             }
         }
     }
