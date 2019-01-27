@@ -654,7 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309e672f1c5a1476c9132c269289855d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  versionNumber: 0
+  versionNumber: 1
   loadingScene: {fileID: 666163684}
   playerPrefab: {fileID: 114024013839989562, guid: b5552e0da9c2445939b84a544b2911a5,
     type: 2}
@@ -938,6 +938,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4325703053485652, guid: accd4b5c9295244e589d36334fde5633, type: 2}
       propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441290441250386, guid: accd4b5c9295244e589d36334fde5633, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 14.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441290441250386, guid: accd4b5c9295244e589d36334fde5633, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4441290441250386, guid: accd4b5c9295244e589d36334fde5633, type: 2}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

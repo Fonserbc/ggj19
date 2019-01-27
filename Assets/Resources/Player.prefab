@@ -75,7 +75,6 @@ GameObject:
   - component: {fileID: 114251770185213326}
   - component: {fileID: 114946316773294038}
   - component: {fileID: 114836156471687480}
-  - component: {fileID: 114981610065984280}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -345,6 +344,7 @@ GameObject:
   - component: {fileID: 124628823985362142}
   - component: {fileID: 81672565492557912}
   - component: {fileID: 114559868408295668}
+  - component: {fileID: 114658890806016858}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -400,7 +400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1679872095637872
 GameObject:
   m_ObjectHideFlags: 1
@@ -1828,6 +1828,28 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "< ORBIT %%\xB0W"
+--- !u!114 &114658890806016858
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1587984763072432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: event:/Music
+  PlayEvent: 1
+  StopEvent: 2
+  CollisionTag: 
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &114776432537451592
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2001,7 +2023,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  fmodEventEmmiter: {fileID: 114981610065984280}
+  fmodEventEmmiter: {fileID: 114658890806016858}
   holdPositionObject: {fileID: 1589823974163334}
   canWinObject: {fileID: 1964915330680178}
   holdToWinObject: {fileID: 1114096896987436}
@@ -2044,28 +2066,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: '>>>'
---- !u!114 &114981610065984280
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1157190374502916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: event:/Music
-  PlayEvent: 1
-  StopEvent: 2
-  CollisionTag: 
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
 --- !u!114 &114993097666515066
 MonoBehaviour:
   m_ObjectHideFlags: 1
