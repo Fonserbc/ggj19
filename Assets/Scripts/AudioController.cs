@@ -89,7 +89,7 @@ public class AudioController : MonoBehaviour {
                     canWin = false;
                 }
 
-                bool spaceDown = Input.GetKeyDown(KeyCode.Space);
+                bool spaceDown = Input.GetKey(KeyCode.Space);
                 canWinObject.SetActive(canWin && !spaceDown);
                 holdToWinObject.SetActive(canWin && spaceDown);
                 PlayerSync.localPlayer.ownState.won = canWin && spaceDown;
