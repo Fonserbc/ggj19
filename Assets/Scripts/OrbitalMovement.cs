@@ -106,9 +106,12 @@ public class OrbitalMovement : MonoBehaviour {
     {
         playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
         playerSync.UpdateState();
-        this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
-        playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
-        this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+        if (playerSync.isLocal || Logic.won)
+        {
+            this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+            playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
+            this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+        }
     }
 
     private void UpdateDockMessage()
