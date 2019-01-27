@@ -60,4 +60,7 @@ MonoBehaviour:
   Plugins: []
   MasterBanks:
   - Master Bank
+  - C:\Users\kimbe\Documents\GitHub\ggj19\MusicProject\GGJ19 DockingInOrbit\Build\Desktop\Master
+    Bank
+  - Master Bank
   Banks: []

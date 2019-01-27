@@ -32,3 +32,4 @@ sysinfo.txt
 *.vs
 Assets/Photon/PhotonVoice/PhotonVoiceLibs/*
 Assets/Photon/*
+Assets/FMODStudioCache*
