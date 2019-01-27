@@ -7,15 +7,21 @@ public class OrbitalMovement : MonoBehaviour {
 
     public GameSettings settings;
     public PlayerSync playerSync;
-    public Text message;
+    
     float orbitDistance;
     float orbitChangeAngle;
     float[] orbitSpeeds;
 
     private Vector3 orbitAngle;
     private int orbitSpeedIndex;
+    private bool isDockReady;
     public GameObject refOrbiter;
     public GameObject refOrbit;
+
+    [Space]
+    public Text message;
+    public Text direction;
+    public Text speed;
 
     // Use this for initialization
     void Start() {
@@ -38,26 +44,35 @@ public class OrbitalMovement : MonoBehaviour {
     void Update() {
         if (!Logic.won && playerSync.isLocal) this.UpdateInput();
         this.UpdateRotation();
+        this.UpdateDockMessage();
     }
 
     private void UpdateInput()
     {
         // Speed up
         if (Input.GetKeyDown("w") || Input.GetKeyDown("up"))
+        {
             if (this.orbitSpeedIndex < (this.orbitSpeeds.Length - 1))
                 this.orbitSpeedIndex++;
 
+            this.StartCoroutine(this.Speed(this.orbitSpeedIndex));
+        }
+
         // Speed down
         if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
+        {
             if (this.orbitSpeedIndex > 0f)
                 this.orbitSpeedIndex--;
+
+            this.StartCoroutine(this.Speed(this.orbitSpeedIndex));
+        }
 
         // Change Y axis to the left
         if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
         {
             //this.orbitAngle.x -= orbitChangeAngle;
             this.orbitAngle.y -= (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
-            this.StartCoroutine(this.Message("<                     "));
+            this.StartCoroutine(this.Directions("<                           "));
         }
 
         // Change Y axis to the right
@@ -66,7 +81,7 @@ public class OrbitalMovement : MonoBehaviour {
 
             //this.orbitAngle.x += orbitChangeAngle;
             this.orbitAngle.y += (this.refOrbit.transform.localEulerAngles.z  < 180f) ? orbitChangeAngle : -orbitChangeAngle;
-            this.StartCoroutine(this.Message("                     >"));
+            this.StartCoroutine(this.Directions("                           >"));
         }
 
         playerSync.ownState.orbitGoal = orbitAngle;
@@ -82,13 +97,38 @@ public class OrbitalMovement : MonoBehaviour {
         this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
     }
 
-    private IEnumerator Message(string text)
+    private void UpdateDockMessage()
     {
-        if (this.message)
+        if (this.isDockReady)
         {
-            this.message.text = text;
-            yield return new WaitForSeconds(1f);
+            if (this.message.text.Length == 0)
+                this.message.text = "PRESS SPACE TO DOCK";
+        }
+        else if (this.message.text.Length > 0)
             this.message.text = "";
+    }
+
+    private IEnumerator Directions(string text)
+    {
+        if (this.direction)
+        {
+            this.direction.text = text;
+            yield return new WaitForSeconds(1f);
+            this.direction.text = "";
+        }
+    }
+
+    private IEnumerator Speed(int speedIndex)
+    {
+        string text = "";
+        for (int i = -1; i < speedIndex; i++)
+            text += ">";
+
+        if (this.speed)
+        {
+            this.speed.text = text;
+            yield return new WaitForSeconds(1f);
+            this.speed.text = "";
         }
     }
 }
