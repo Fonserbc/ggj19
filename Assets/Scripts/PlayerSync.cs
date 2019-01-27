@@ -114,7 +114,7 @@ public class PlayerSync : MonoBehaviour, IPunObservable
             ownState.currentOrbit.z = Mathf.Lerp(ownState.currentOrbit.z + ownState.currentSpeed * Time.deltaTime, lastOrbitPos, Time.deltaTime * 4f);
 
             if (ownState.won || Logic.won) {
-                dummyPlayerObject.transform.localPosition = Vector3.Slerp(dummyPlayerObject.transform.localPosition, new Vector3(0.5f, 0, 0), Time.deltaTime);
+                dummyPlayerObject.transform.localPosition = Vector3.Slerp(dummyPlayerObject.transform.localPosition, new Vector3(0.8f, 0, 0), Time.deltaTime);
             }
             else {
                 dummyPlayerObject.transform.localPosition = Vector3.Slerp(dummyPlayerObject.transform.localPosition, Vector3.zero, Time.deltaTime);
