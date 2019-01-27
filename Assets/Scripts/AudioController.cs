@@ -138,7 +138,7 @@ public class AudioController : MonoBehaviour {
                 voiceMixer.SetFloat("ReceivedVoiceVolume", -80f);
 
                 fmodEventEmmiter.SetParameter("Distance", 100f);
-                fmodEventEmmiter.SetParameter("Polarity", 1);
+                fmodEventEmmiter.SetParameter("Polarity", -1f);
 
                 holdPositionObject.SetActive(false);
                 canWinObject.SetActive(false);
