@@ -93,7 +93,9 @@ public class PlayerSync : MonoBehaviour, IPunObservable
         {
             ownState.currentOrbit.x = Mathf.Lerp(ownState.currentOrbit.x, ownState.orbitGoal.x, Time.deltaTime * localLerpFactor);
             ownState.currentOrbit.y = Mathf.Lerp(ownState.currentOrbit.y, ownState.orbitGoal.y, Time.deltaTime * localLerpFactor);
-            ownState.currentSpeed = Mathf.Lerp(ownState.currentSpeed, ownState.speedGoal, Time.deltaTime * localLerpFactor);
+
+            float orbitFactor = Mathf.Lerp(1f, 0.3f, Mathf.Abs(Mathf.Sin((ownState.currentOrbit.y % 180f) * Mathf.Deg2Rad)));
+            ownState.currentSpeed = Mathf.Lerp(ownState.currentSpeed, ownState.speedGoal, Time.deltaTime * localLerpFactor * orbitFactor);
 
             ownState.currentOrbit.z += ownState.currentSpeed * Time.deltaTime;
         }
@@ -108,7 +110,7 @@ public class PlayerSync : MonoBehaviour, IPunObservable
             lastOrbitPos += Time.deltaTime * receivedState.currentSpeed;
             ownState.currentOrbit.z = Mathf.Lerp(ownState.currentOrbit.z + ownState.currentSpeed * Time.deltaTime, lastOrbitPos, Time.deltaTime * 4f);
 
-            if (ownState.won) {
+            if (ownState.won || Logic.won) {
                 dummyPlayerObject.transform.localScale = Vector3.Slerp(dummyPlayerObject.transform.localScale, Vector3.one * 2f, Time.deltaTime);
             }
             else {

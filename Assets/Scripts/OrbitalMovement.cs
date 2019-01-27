@@ -23,11 +23,16 @@ public class OrbitalMovement : MonoBehaviour {
     public Text direction;
     public Text speed;
 
+    public float inputCooldown = 1f;
+    float lastInputTimeAcc = 0f;
+
     // Use this for initialization
     void Start() {
 
-        orbitSpeeds = new float[settings.speedPeriods.Length];
-        for (int i = 0; i < orbitSpeeds.Length; ++i)
+        orbitSpeeds = new float[3];
+        int speedShift = playerSync.playerID == 1 ? 0 : 1;
+
+        for (int i = speedShift; i < orbitSpeeds.Length; ++i)
         {
             orbitSpeeds[i] = 360f / settings.speedPeriods[i];
         }
@@ -49,39 +54,48 @@ public class OrbitalMovement : MonoBehaviour {
 
     private void UpdateInput()
     {
-        // Speed up
-        if (Input.GetKeyDown("w") || Input.GetKeyDown("up"))
+        lastInputTimeAcc -= Time.deltaTime;
+
+        if (!Input.GetKey(KeyCode.Space) && lastInputTimeAcc <= 0f)
         {
-            if (this.orbitSpeedIndex < (this.orbitSpeeds.Length - 1))
-                this.orbitSpeedIndex++;
+            // Speed up
+            if (Input.GetKeyDown("w") || Input.GetKeyDown("up"))
+            {
+                if (this.orbitSpeedIndex < (this.orbitSpeeds.Length - 1))
+                    this.orbitSpeedIndex++;
 
-            this.StartCoroutine(this.Speed(this.orbitSpeedIndex));
-        }
+                this.StartCoroutine(this.Speed(this.orbitSpeedIndex));
+                lastInputTimeAcc = inputCooldown;
+            }
 
-        // Speed down
-        if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
-        {
-            if (this.orbitSpeedIndex > 0f)
-                this.orbitSpeedIndex--;
+            // Speed down
+            if (Input.GetKeyDown("s") || Input.GetKeyDown("down"))
+            {
+                if (this.orbitSpeedIndex > 0f)
+                    this.orbitSpeedIndex--;
 
-            this.StartCoroutine(this.Speed(this.orbitSpeedIndex));
-        }
+                this.StartCoroutine(this.Speed(this.orbitSpeedIndex));
+                lastInputTimeAcc = inputCooldown;
+            }
 
-        // Change Y axis to the left
-        if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
-        {
-            //this.orbitAngle.x -= orbitChangeAngle;
-            this.orbitAngle.y -= (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
-            this.StartCoroutine(this.Directions("<                           "));
-        }
+            // Change Y axis to the left
+            if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
+            {
+                //this.orbitAngle.x -= orbitChangeAngle;
+                this.orbitAngle.y -= (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
+                this.StartCoroutine(this.Directions("< Adjusting Orbit West"));
+                lastInputTimeAcc = inputCooldown;
+            }
 
-        // Change Y axis to the right
-        if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
-        {
+            // Change Y axis to the right
+            if (Input.GetKeyDown("d") || Input.GetKeyDown("right"))
+            {
 
-            //this.orbitAngle.x += orbitChangeAngle;
-            this.orbitAngle.y += (this.refOrbit.transform.localEulerAngles.z  < 180f) ? orbitChangeAngle : -orbitChangeAngle;
-            this.StartCoroutine(this.Directions("                           >"));
+                //this.orbitAngle.x += orbitChangeAngle;
+                this.orbitAngle.y += (this.refOrbit.transform.localEulerAngles.z < 180f) ? orbitChangeAngle : -orbitChangeAngle;
+                this.StartCoroutine(this.Directions("Adjusting Orbit East >"));
+                lastInputTimeAcc = inputCooldown;
+            }
         }
 
         playerSync.ownState.orbitGoal = orbitAngle;
@@ -92,9 +106,12 @@ public class OrbitalMovement : MonoBehaviour {
     {
         playerSync.ownState.speedGoal = this.orbitSpeeds[this.orbitSpeedIndex];
         playerSync.UpdateState();
-        this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
-        playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
-        this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+        if (playerSync.isLocal || Logic.won)
+        {
+            this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+            playerSync.ownState.currentOrbit.z = this.refOrbit.transform.localEulerAngles.z % 360f;
+            this.refOrbit.transform.localEulerAngles = playerSync.ownState.currentOrbit;
+        }
     }
 
     private void UpdateDockMessage()
@@ -127,7 +144,7 @@ public class OrbitalMovement : MonoBehaviour {
         if (this.speed)
         {
             this.speed.text = text;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(inputCooldown);
             this.speed.text = "";
         }
     }

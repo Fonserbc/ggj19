@@ -15,6 +15,8 @@ public class Logic : MonoBehaviour {
                 won = true;
                 winObject.SetActive(true);
                 enabled = false;
+
+                PlayerSync.otherPlayer.transform.SetParent(PlayerSync.localPlayer.transform);
             }
         }
     }

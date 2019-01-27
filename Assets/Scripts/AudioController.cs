@@ -17,6 +17,8 @@ public class AudioController : MonoBehaviour {
     public GameObject canWinObject;
     public GameObject holdToWinObject;
 
+    public float minPitch = 0.5f, maxPitch = 2f;
+
     float fmodPolarity = 0f;
     float fmodDistance = 0f;
 
@@ -89,12 +91,22 @@ public class AudioController : MonoBehaviour {
                     canWin = false;
                 }
 
-                bool spaceDown = Input.GetKey(KeyCode.Space);
-                canWinObject.SetActive(canWin && !spaceDown);
-                holdToWinObject.SetActive(canWin && spaceDown);
-                PlayerSync.localPlayer.ownState.won = canWin && spaceDown;
+                if (!Logic.won)
+                {
 
-                fmodEventEmmiter.SetParameter("Distance", fmodDistance);
+                    bool spaceDown = Input.GetKey(KeyCode.Space);
+                    canWinObject.SetActive(canWin && !spaceDown);
+                    holdToWinObject.SetActive(canWin && spaceDown);
+                    PlayerSync.localPlayer.ownState.won = canWin && spaceDown;
+
+                    fmodEventEmmiter.SetParameter("Distance", fmodDistance);
+                }
+                else {
+                    holdPositionObject.SetActive(false);
+                    canWinObject.SetActive(false);
+                    holdToWinObject.SetActive(false);
+                    fmodEventEmmiter.SetParameter("Distance", 0);
+                }
 
                 //if (softenedSpeed > 0 && speed > softenedSpeed) softenedSpeed = speed;
                 //else if (softenedSpeed < 0 && speed < softenedSpeed) softenedSpeed = speed;
@@ -103,9 +115,10 @@ public class AudioController : MonoBehaviour {
 
                 if (doPitchDistortion)
                 {
-                    voiceMixer.SetFloat("ReceivedVoicePitch", Mathf.Lerp(0.5f, 2f, 1f - Mathf.InverseLerp(-0.7f, 0.7f, softenedSpeed)));
+                    voiceMixer.SetFloat("ReceivedVoicePitch", Mathf.Lerp(minPitch, maxPitch, 1f - Mathf.InverseLerp(-0.7f, 0.7f, softenedSpeed)));
                 }
-                else {
+                else
+                {
                     voiceMixer.SetFloat("ReceivedVoicePitch", 1f);
                 }
 
@@ -113,9 +126,11 @@ public class AudioController : MonoBehaviour {
                 {
                     voiceMixer.SetFloat("ReceivedVoiceVolume", volumeDropCurve.Evaluate(Mathf.Clamp01(currentDistance / maxDistance)));
                 }
-                else {
+                else
+                {
                     voiceMixer.SetFloat("ReceivedVoiceVolume", 0f);
                 }
+                
 
                 lastDistance = currentDistance;
             }
