@@ -9,6 +9,7 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
 {
 
     public int versionNumber = 0;
+    public GameObject initialWholeScene;
     public GameObject loadingScene;
     public GameObject tutorialScene;
     [Tooltip("This prefab needs to be in the Resources folder")]
@@ -17,6 +18,7 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
 
     private void Start()
     {
+        initialWholeScene.gameObject.SetActive(true);
         loadingScene.gameObject.SetActive(false);
         tutorialScene.gameObject.SetActive(true);
     }
@@ -56,8 +58,11 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room. From here on, your game would be running.");
-        SetupScene();
+        joinedRoom = true;
     }
+
+    bool joinedRoom = false;
+    bool init = false;
 
     void SetupScene()
     {
@@ -70,17 +75,23 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
         voiceConnection.PrimaryRecorder.TransmitEnabled = true;
         voiceConnection.PrimaryRecorder.Init(voiceConnection.VoiceClient);
 
-        loadingScene.SetActive(false);
+        initialWholeScene.gameObject.SetActive(false);
         PlayerSync localPlayer = PhotonNetwork.Instantiate(playerPrefab.gameObject.name, Vector3.zero, Quaternion.identity, 0).GetComponent<PlayerSync>();
 
         localPlayer.Init();
-
+        init = true;
     }
 
     private void Update()
     {
+        if (init) return;
+
         if (Input.GetKeyDown(KeyCode.Space) && !PhotonNetwork.IsConnected) {
             ConnectNow();
+        }
+
+        if (joinedRoom && PhotonNetwork.PlayerList.Length > 1) {
+            SetupScene();
         }
     }
 }
