@@ -32,6 +32,14 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
         tutorialScene.gameObject.SetActive(false);
         PhotonNetwork.JoinRandomRoom(null, 2);
     }
+
+    void DisconnectNow() {
+        Debug.Log("Disconnecting to server");
+        loadingScene.gameObject.SetActive(false);
+        tutorialScene.gameObject.SetActive(true);
+        PhotonNetwork.LeaveRoom();
+    }
+
     public override void OnConnectedToMaster()
     {
         Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
@@ -85,14 +93,24 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (init) return;
-
-        if (Input.GetKeyDown(KeyCode.Space) && PhotonNetwork.IsConnected) {
-            ConnectNow();
+        if (init)
+        {
+            if (PhotonNetwork.PlayerList.Lenth < 2) {
+                DisconnectNow();
+                init = false;
+            }
+        
         }
+        else {
+            if (Input.GetKeyDown(KeyCode.Space) && PhotonNetwork.IsConnected)
+            {
+                ConnectNow();
+            }
 
-        if (joinedRoom && PhotonNetwork.PlayerList.Length > 1) {
-            SetupScene();
+            if (joinedRoom && PhotonNetwork.PlayerList.Length > 1)
+            {
+                SetupScene();
+            }
         }
     }
 }
