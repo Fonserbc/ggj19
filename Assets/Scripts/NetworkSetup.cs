@@ -87,7 +87,7 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
     {
         if (init) return;
 
-        if (Input.GetKeyDown(KeyCode.Space) && !PhotonNetwork.IsConnected) {
+        if (Input.GetKeyDown(KeyCode.Space) && PhotonNetwork.IsConnected) {
             ConnectNow();
         }
 
