@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{20e5b5db-a6c1-450e-b85e-b311b4dc3126}">
+        <property name="assetPath">
+            <value>A7 harm blip/Plu A7 telv 5.aif</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.58823129251700679</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{744ed0a2-350b-485b-84f0-ea51b6bcb1c0}</destination>
+        </relationship>
+    </object>
+</objects>

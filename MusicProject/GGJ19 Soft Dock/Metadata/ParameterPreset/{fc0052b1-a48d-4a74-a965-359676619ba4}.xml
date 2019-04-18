@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="ParameterPreset" id="{fc0052b1-a48d-4a74-a965-359676619ba4}">
+        <property name="name">
+            <value>OrbitAngle</value>
+        </property>
+        <relationship name="folder">
+            <destination>{79c68c4d-4642-41d4-86ac-4b1e968e039d}</destination>
+        </relationship>
+        <relationship name="parameter">
+            <destination>{758d4875-41a1-4fac-aecb-8ccca4572956}</destination>
+        </relationship>
+    </object>
+    <object class="GameParameter" id="{758d4875-41a1-4fac-aecb-8ccca4572956}">
+        <property name="maximum">
+            <value>180</value>
+        </property>
+        <property name="initialValue">
+            <value>90</value>
+        </property>
+    </object>
+</objects>

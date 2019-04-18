@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{1b9d9aea-430b-4441-a7fe-f04923777c2f}">
+        <property name="assetPath">
+            <value>Pi Anticip/Pi Anticip 3.aif</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>1.1764625850340136</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{744ed0a2-350b-485b-84f0-ea51b6bcb1c0}</destination>
+        </relationship>
+    </object>
+</objects>

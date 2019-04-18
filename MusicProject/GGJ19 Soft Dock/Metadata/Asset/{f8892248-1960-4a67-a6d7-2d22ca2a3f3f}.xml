@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="EncodableAsset" id="{f8892248-1960-4a67-a6d7-2d22ca2a3f3f}">
+        <property name="assetPath">
+            <value>A7 harm blip/</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{744ed0a2-350b-485b-84f0-ea51b6bcb1c0}</destination>
+        </relationship>
+    </object>
+</objects>

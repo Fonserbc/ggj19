@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{5f624774-1b39-4480-9e67-49858692d91a}">
+        <property name="assetPath">
+            <value>Vc A 5.aif</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>7.0588208616780044</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{744ed0a2-350b-485b-84f0-ea51b6bcb1c0}</destination>
+        </relationship>
+    </object>
+</objects>
