@@ -40,7 +40,7 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
         Debug.Log("Leaving room");
         loadingScene.gameObject.SetActive(false);
         tutorialScene.gameObject.SetActive(true);
-        if (PlayerSync.localPlayer.gameObject != null) PhotonNetwork.Destroy(PlayerSync.localPlayer.gameObject);
+        if (PlayerSync.localPlayer != null && PlayerSync.localPlayer.gameObject != null) PhotonNetwork.Destroy(PlayerSync.localPlayer.gameObject);
         PhotonNetwork.LeaveRoom();
         joinedRoom = false;
     }
