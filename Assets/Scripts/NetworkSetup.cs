@@ -37,7 +37,7 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
         Debug.Log("Disconnecting to server");
         loadingScene.gameObject.SetActive(false);
         tutorialScene.gameObject.SetActive(true);
-        if (localPlayer.gameObject != null) PhotonNetwork.Destroy(localPlayer.gameObject);
+        if (PlayerSync.localPlayer.gameObject != null) PhotonNetwork.Destroy(PlayerSync.localPlayer.gameObject);
         PhotonNetwork.LeaveRoom();
     }
 
