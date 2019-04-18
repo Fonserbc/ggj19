@@ -21,28 +21,27 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
         initialWholeScene.gameObject.SetActive(true);
         loadingScene.gameObject.SetActive(false);
         tutorialScene.gameObject.SetActive(true);
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.GameVersion = versionNumber.ToString();
     }
 
     void ConnectNow()
     {
         Debug.Log("Connecting to server");
-        PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.GameVersion = versionNumber.ToString();
         loadingScene.gameObject.SetActive(true);
         tutorialScene.gameObject.SetActive(false);
+        PhotonNetwork.JoinRandomRoom(null, 0);
     }
     public override void OnConnectedToMaster()
     {
         Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
-        Debug.Log(PhotonNetwork.IsConnected);
-        PhotonNetwork.JoinRandomRoom(null, 0);
     }
 
     public override void OnJoinedLobby()
     {
         Debug.Log("OnJoinedLobby(). This client is connected and does get a room-list, which gets stored as PhotonNetwork.GetRoomList(). This script now calls: PhotonNetwork.JoinRandomRoom();");
-        Debug.Log(PhotonNetwork.IsConnected);
-        PhotonNetwork.JoinRandomRoom(null, 0);
+        //Debug.Log(PhotonNetwork.IsConnected);
+        //PhotonNetwork.JoinRandomRoom(null, 0);
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
