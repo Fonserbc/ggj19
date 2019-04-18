@@ -42027,7 +42027,7 @@
             <value>0</value>
         </property>
         <property name="maximum">
-            <value>40</value>
+            <value>39</value>
         </property>
         <relationship name="parameter">
             <destination>{821ab76b-4914-4ae0-b8ed-19f12e4b380d}</destination>
@@ -42038,7 +42038,7 @@
             <value>0</value>
         </property>
         <property name="maximum">
-            <value>5</value>
+            <value>0</value>
         </property>
         <relationship name="parameter">
             <destination>{821ab76b-4914-4ae0-b8ed-19f12e4b380d}</destination>
@@ -42049,7 +42049,7 @@
             <value>0</value>
         </property>
         <property name="maximum">
-            <value>5</value>
+            <value>0</value>
         </property>
         <relationship name="parameter">
             <destination>{821ab76b-4914-4ae0-b8ed-19f12e4b380d}</destination>
