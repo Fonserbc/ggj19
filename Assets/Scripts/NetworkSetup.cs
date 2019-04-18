@@ -21,8 +21,11 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
         initialWholeScene.gameObject.SetActive(true);
         loadingScene.gameObject.SetActive(false);
         tutorialScene.gameObject.SetActive(true);
-        PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.GameVersion = versionNumber.ToString();
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.GameVersion = versionNumber.ToString();
+        }
     }
 
     void ConnectNow()
@@ -34,11 +37,12 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
     }
 
     void DisconnectNow() {
-        Debug.Log("Disconnecting to server");
+        Debug.Log("Leaving room");
         loadingScene.gameObject.SetActive(false);
         tutorialScene.gameObject.SetActive(true);
         if (PlayerSync.localPlayer.gameObject != null) PhotonNetwork.Destroy(PlayerSync.localPlayer.gameObject);
         PhotonNetwork.LeaveRoom();
+        joinedRoom = false;
     }
 
     public override void OnConnectedToMaster()
@@ -96,21 +100,31 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
     {
         if (init)
         {
-            if (PhotonNetwork.PlayerList.Length < 2) {
-                DisconnectNow();
+            if (PhotonNetwork.PlayerList.Length < 2)
+            {
                 init = false;
+                DisconnectNow();
+                Debug.Log("Reloading scene..");
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
             }
-        
         }
         else {
-            if (Input.GetKeyDown(KeyCode.Space) && PhotonNetwork.IsConnected)
+            if (joinedRoom)
             {
-                ConnectNow();
+                if (PhotonNetwork.PlayerList.Length > 1)
+                {
+                    SetupScene();
+                }
+                else if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    DisconnectNow();
+                }
             }
-
-            if (joinedRoom && PhotonNetwork.PlayerList.Length > 1)
-            {
-                SetupScene();
+            else {
+                if (Input.GetKeyDown(KeyCode.Space) && PhotonNetwork.IsConnected)
+                {
+                    ConnectNow();
+                }
             }
         }
     }
