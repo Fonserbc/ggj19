@@ -30,7 +30,7 @@ public class NetworkSetup : MonoBehaviourPunCallbacks
         Debug.Log("Connecting to server");
         loadingScene.gameObject.SetActive(true);
         tutorialScene.gameObject.SetActive(false);
-        PhotonNetwork.JoinRandomRoom(null, 0);
+        PhotonNetwork.JoinRandomRoom(null, 2);
     }
     public override void OnConnectedToMaster()
     {

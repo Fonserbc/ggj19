@@ -17,7 +17,7 @@ MonoBehaviour:
     AppIdVoice: c10d82ae-bafe-440c-a0e5-73d4adc4074c
     AppVersion: 3
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: Europe
     Server: 
     Port: 0
     Protocol: 0
