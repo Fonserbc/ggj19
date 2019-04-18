@@ -69,6 +69,11 @@ public class AudioController : MonoBehaviour {
                 minSpeed = Mathf.Min(minSpeed, softenedSpeed);
                 maxSpeed = Mathf.Max(maxSpeed, softenedSpeed);
 
+                float angleBetweenPlayerOrbits = Mathf.Abs(PlayerSync.localPlayer.ownState.currentOrbit.y - PlayerSync.otherPlayer.ownState.currentOrbit.y);
+                Debug.Log(angleBetweenPlayerOrbits);
+
+                fmodEventEmmiter.SetParameter("OrbitAngle", 90f);
+
                 fmodPolarity = Mathf.Sign(softenedSpeed);
                 fmodEventEmmiter.SetParameter("Polarity", fmodPolarity);
                 fmodDistance = Mathf.Clamp01(currentDistance / maxDistance) * 100f + 1f;
